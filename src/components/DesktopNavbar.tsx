@@ -23,7 +23,7 @@ export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
       role='navigation'
       animate={{ width: isOpen ? 300 : 90 }}
       transition={{ type: "spring", stiffness: 200, damping: 25 }}
-      className='hidden lg:flex bg-grey-900 h-screen fixed top-0 left-0 overflow-hidden flex-col'>
+      className='hidden lg:flex bg-grey-900 h-screen fixed top-0 left-0 overflow-hidden flex-col rounded-r-[16px]'>
       {/* Logo */}
       <motion.div
         className={`mb-[64px] mt-10 px-8 overflow-hidden ${
