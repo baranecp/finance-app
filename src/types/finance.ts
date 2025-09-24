@@ -13,11 +13,20 @@ export type Budget = {
     spent: number
 }
 
+export type Pots = {
+    id:number
+    name: string
+    saved: number
+    target: number
+}
+
 export type Overview = {
     color: string
     background: string
     textColor?: string
     sumColor?: string
+    icon?: React.ElementType
+    iconColor?: string
     text: string
     sum: string
 }
