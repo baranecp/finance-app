@@ -16,12 +16,12 @@ export default function Home() {
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const { isOpen } = useSidebarStore();
   return (
-    <div className='lg:flex lg:h-screen'>
+    <div className='flex h-screen'>
       <Navbar />
       <motion.main
         animate={{ marginLeft: isLargeScreen ? (isOpen ? 40 : 40) : 0 }}
         transition={{ type: "spring", stiffness: 200, damping: 25 }}
-        className={`lg:flex-1 lg:p-6 lg:overflow-y-auto ${PublicSans.className}`}>
+        className={`md:px-10 md:mt-10 mt-6 px-4 flex-1 overflow-y-auto ${PublicSans.className}`}>
         <Overview />
       </motion.main>
     </div>

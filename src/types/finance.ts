@@ -12,3 +12,12 @@ export type Budget = {
     limit: number
     spent: number
 }
+
+export type Overview = {
+    color: string
+    background: string
+    textColor?: string
+    sumColor?: string
+    text: string
+    sum: string
+}
