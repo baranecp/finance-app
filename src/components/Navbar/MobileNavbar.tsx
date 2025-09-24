@@ -22,7 +22,7 @@ export default function MobileNavbar({ navItems }: MobileNavbarProps) {
                            hover:bg-beige-100 hover:border-secondary-green
                            rounded-t-lg transition-colors duration-150 cursor-pointer'>
                 <Icon className='w-6 h-6 text-grey-300 group-hover:text-secondary-green transition-colors' />
-                <span className='hidden md:block text-xs text-grey-300 group-hover:text-grey-900 mt-1'>
+                <span className='hidden md:block body-m-bold text-grey-300 group-hover:text-grey-900 mt-1'>
                   {item.label}
                 </span>
               </li>

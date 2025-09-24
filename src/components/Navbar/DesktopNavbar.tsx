@@ -1,29 +1,28 @@
 "use client";
-import { useState } from "react";
+import { useSidebarStore } from "@/store/useSidebarStore";
 import { motion, AnimatePresence } from "framer-motion";
 import NavItems from "./NavItems";
 
 /*Logos*/
-import LogoFull from "../../public/Logo.svg";
-import LogoShort from "../../public/LogoCollapse.svg";
+import LogoFull from "../../../public/Logo.svg";
+import LogoShort from "../../../public/LogoCollapse.svg";
 
 /*Icons*/
-import ArrowLeft from "../../public/ArrowLeft.svg";
-import ArrowRight from "../../public/ArrowRight.svg";
+import ArrowLeft from "../../../public/ArrowLeft.svg";
+import ArrowRight from "../../../public/ArrowRight.svg";
 
 interface DesktopNavbarProps {
   navItems: { icon: React.ElementType; label: string }[];
 }
 
 export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
+  const { isOpen, toggle } = useSidebarStore();
   return (
     <motion.aside
       role='navigation'
       animate={{ width: isOpen ? 300 : 90 }}
       transition={{ type: "spring", stiffness: 200, damping: 25 }}
-      className='hidden lg:flex bg-grey-900 h-screen fixed top-0 left-0 overflow-hidden flex-col rounded-r-[16px]'>
+      className='hidden lg:flex bg-grey-900 h-screen sticky top-0 left-0 overflow-hidden flex-col rounded-r-[16px]'>
       {/* Logo */}
       <motion.div
         className={`mb-[64px] mt-10 px-8 overflow-hidden ${
@@ -60,7 +59,7 @@ export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
       {/* Toggle Button */}
       <motion.button
         tabIndex={0}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggle}
         aria-label={isOpen ? "Collapse navbar" : "Expand navbar"}
         className='group text-grey-300 hover:text-secondary-green mt-auto flex items-center gap-1 mx-8 mb-10 cursor-pointer'>
         <div className='flex items-center gap-3 z-10'>

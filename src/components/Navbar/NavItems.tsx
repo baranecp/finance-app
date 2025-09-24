@@ -20,7 +20,7 @@ export default function NavItems({ items, isOpen }: NavItemsProps) {
           <motion.li
             tabIndex={0}
             key={idx}
-            className={`relative group flex items-center gap-3 px-8 py-4 cursor-pointer overflow-hidden ${
+            className={`relative group flex items-center gap-200 px-8 py-4 cursor-pointer overflow-hidden heading-m whitespace-nowrap  ${
               isOpen && "rounded-r-[0.75rem] max-w-2xs"
             }`}
             initial='rest'
@@ -28,7 +28,7 @@ export default function NavItems({ items, isOpen }: NavItemsProps) {
             animate='rest'>
             {/* Full-item background fill */}
             <motion.span
-              className='absolute inset-0 bg-beige-100 origin-left'
+              className='absolute inset-0 bg-beige-100 origin-left border-l-4  border-secondary-green'
               variants={{
                 rest: { scaleX: 0 },
                 hover: { scaleX: 1 },
