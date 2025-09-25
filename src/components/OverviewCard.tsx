@@ -47,7 +47,7 @@ const overviewCard = tv({
     iconColor: {
       white: { icon: "fill-white" },
       gray: { icon: "fill-gray-400" },
-      green: { icon: "fill-green-900" },
+      green: { icon: "fill-secondary-green" },
     },
   },
   extend: {
