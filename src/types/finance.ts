@@ -18,6 +18,14 @@ export type Pots = {
     name: string
     saved: number
     target: number
+    color: string
+}
+
+export type Pot = {
+    id: number
+    name: string
+    saved: number
+    color: string
 }
 
 export type Overview = {

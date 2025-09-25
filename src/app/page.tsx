@@ -16,7 +16,7 @@ export default function Home() {
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const { isOpen } = useSidebarStore();
   return (
-    <div className='flex h-screen'>
+    <div className='flex h-screen bg-beige-100'>
       <Navbar />
       <motion.main
         animate={{ marginLeft: isLargeScreen ? (isOpen ? 40 : 40) : 0 }}
