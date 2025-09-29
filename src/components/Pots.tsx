@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { Pots } from "@/types/finance";
+import { GoTriangleRight } from "react-icons/go";
 import PotsIcon from "../../public/pots.svg";
 import OverviewCard from "./OverviewCard";
 import Pot from "./Pot";
@@ -24,7 +25,9 @@ export default function Pots() {
     <section className='flex flex-col gap-5 w-full lg:max-w-[700px] bg-white mt-8 px-5 py-6 rounded-[12px]'>
       <div className='flex justify-between'>
         <h2 className='heading-l'>Pots</h2>
-        <button className='body-m text-grey-500'>See Details</button>
+        <button className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'>
+          See Details <GoTriangleRight />
+        </button>
       </div>
       <div className='md:flex gap-5'>
         <OverviewCard

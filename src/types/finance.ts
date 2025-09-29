@@ -1,4 +1,4 @@
-export type Transaction = {
+export type Transactions = {
     id: number
     type: "income" | "expense"
     category: string
