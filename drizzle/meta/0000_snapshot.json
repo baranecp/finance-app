@@ -1,5 +1,5 @@
 {
-  "id": "0de3b326-5a1e-4f28-bb5e-ceb0a10c4866",
+  "id": "a2e70172-9cdb-46c0-9217-6c320d2cc51c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,9 +10,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "category": {
           "name": "category",
@@ -22,7 +23,7 @@
         },
         "maximum": {
           "name": "maximum",
-          "type": "integer",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },
@@ -55,9 +56,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
@@ -67,7 +69,13 @@
         },
         "target": {
           "name": "target",
-          "type": "integer",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total": {
+          "name": "total",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },
@@ -100,9 +108,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "avatar": {
           "name": "avatar",
@@ -125,7 +134,7 @@
         },
         "amount": {
           "name": "amount",
-          "type": "integer",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },

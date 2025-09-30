@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { drizzle } from 'drizzle-orm/neon-http';
 
 if (!process.env.DATABASE_URL) {
