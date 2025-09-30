@@ -15,10 +15,12 @@ export default function Transaction({
       key={id}
       className='flex justify-between items-center body-m-bold relative pb-[20px] mb-[20px] after:content-[""] after:absolute after:left-0 after:right-0 after:bottom-0  after:h-px after:bg-grey-100 last:after:hidden last:pb-0 last:mb-0'>
       <div className='flex items-center gap-2'>
-        <img
+        <Image
           src={avatar}
           alt={name}
-          className='w-10 h-10 rounded-full object-cover'
+          width={40}
+          height={40}
+          className='rounded-full object-cover'
         />
         <span>{name}</span>
       </div>

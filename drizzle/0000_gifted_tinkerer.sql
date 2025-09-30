@@ -19,6 +19,7 @@ CREATE TABLE "pots" (
 CREATE TABLE "transactions" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"avatar" varchar(255),
+	"name" text NOT NULL,
 	"category" varchar(100) NOT NULL,
 	"type" "transaction_type" NOT NULL,
 	"amount" numeric NOT NULL,
