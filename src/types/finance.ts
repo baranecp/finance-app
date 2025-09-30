@@ -1,9 +1,12 @@
 export type Transactions = {
-    id: number
-    type: "income" | "expense"
-    category: string
-    amount: number
-    date:string
+  id: string;
+  name: string,
+  avatar: string;
+  category?: string;
+  type: "income" | "expense";
+  amount: string; // numeric in DB, returned as string
+  date: string;
+  recurring?: boolean;
 }
 
 export type Budget = {

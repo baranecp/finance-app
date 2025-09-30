@@ -10,16 +10,16 @@ export default function Transactions() {
     queryKey: ["transactions"],
     queryFn: async () => {
       const res = await fetch("/api/transactions");
-      if (!res.ok) throw new Error("Failed to fecth transactions");
+      if (!res.ok) throw new Error("Failed to fetch transactions");
       return res.json();
     },
   });
 
-  const lastFive = data?.slice(-5).reverse();
+  console.log(data);
 
   if (isLoading) return <p>Loading transactions...</p>;
   if (error) return <p>Something went wrong.</p>;
-  if (!data) return <p>No transactions found.</p>;
+  if (!data || data.length === 0) return <p>No transactions found.</p>;
 
   return (
     <section className='flex flex-col gap-5 w-full lg:max-w-[700px] bg-white mt-8 px-5 py-6 rounded-[12px]'>
@@ -30,11 +30,12 @@ export default function Transactions() {
         </button>
       </div>
       <div>
-        {lastFive?.map((t) => (
+        {data.map((t) => (
           <Transaction
             key={t.id}
             id={t.id}
-            category={t.category}
+            avatar={t.avatar}
+            name={t.name}
             type={t.type}
             amount={t.amount}
             date={new Date(t.date).toLocaleDateString("en-GB", {
