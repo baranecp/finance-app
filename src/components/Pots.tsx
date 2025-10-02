@@ -1,14 +1,14 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import type { Pots } from "@/types/finance";
+import type { PotType } from "@/types/finance";
 import { GoTriangleRight } from "react-icons/go";
 import PotsIcon from "../../public/pots.svg";
 import OverviewCard from "./OverviewCard";
 import Pot from "./Pot";
 
 export default function Pots() {
-  const { data, isLoading, error } = useQuery<Pots[]>({
+  const { data, isLoading, error } = useQuery<PotType[]>({
     queryKey: ["pots"],
     queryFn: async () => {
       const res = await fetch("/api/pots");
@@ -16,6 +16,10 @@ export default function Pots() {
       return res.json();
     },
   });
+
+  console.log(data);
+
+  const totalSaved = data?.reduce((acc, pot) => acc + Number(pot.total), 0);
 
   if (isLoading) return <p>Loading transactions...</p>;
   if (error) return <p>Something went wrong.</p>;
@@ -34,7 +38,7 @@ export default function Pots() {
           icon={PotsIcon}
           iconColor='green'
           text='Total Saved'
-          sum='$850'
+          sum={`$${totalSaved}`}
           color='gray'
           sumColor='gray'
           background='beige'
@@ -46,8 +50,8 @@ export default function Pots() {
               key={pot.id}
               id={pot.id}
               name={pot.name}
-              saved={pot.saved}
-              color={pot.color}
+              total={pot.total}
+              theme={pot.theme}
             />
           ))}
         </div>

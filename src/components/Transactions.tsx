@@ -15,8 +15,6 @@ export default function Transactions() {
     },
   });
 
-  console.log(data);
-
   if (isLoading) return <p>Loading transactions...</p>;
   if (error) return <p>Something went wrong.</p>;
   if (!data || data.length === 0) return <p>No transactions found.</p>;

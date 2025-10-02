@@ -1,13 +1,15 @@
 "use client";
-import type { Pot } from "@/types/finance";
+import type { PotType } from "@/types/finance";
 
-export default function Pot({ id, name, saved, color }: Pot) {
+export default function Pot({ id, name, total, theme }: PotType) {
   return (
     <div key={id} className='flex overflow-hidden'>
-      <div className={`w-[4px] h-full ${color} rounded-full`}></div>
+      <div
+        style={{ backgroundColor: theme }}
+        className={`w-[4px] h-full rounded-full`}></div>
       <div className='flex flex-col gap-2 pl-4'>
         <span className='body-s text-grey-500'>{name}</span>
-        <span className='body-m-bold'>${saved}</span>
+        <span className='body-m-bold'>${total}</span>
       </div>
     </div>
   );

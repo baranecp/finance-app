@@ -19,16 +19,16 @@ export type Budget = {
 export type Pots = {
     id:number
     name: string
-    saved: number
+    total: number
     target: number
-    color: string
+    theme: string
 }
 
-export type Pot = {
-    id: number
+export type PotType = {
+    id: string
     name: string
-    saved: number
-    color: string
+    total: string
+    theme: string
 }
 
 export type Overview = {
