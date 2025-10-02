@@ -28,21 +28,24 @@ export default function Transactions() {
         </button>
       </div>
       <div>
-        {data.map((t) => (
-          <Transaction
-            key={t.id}
-            id={t.id}
-            avatar={t.avatar}
-            name={t.name}
-            type={t.type}
-            amount={t.amount}
-            date={new Date(t.date).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            })}
-          />
-        ))}
+        {data.map((t) => {
+          const formattedDate = new Date(t.date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          });
+          return (
+            <Transaction
+              key={t.id}
+              id={t.id}
+              avatar={t.avatar}
+              name={t.name}
+              type={t.type}
+              amount={t.amount}
+              date={formattedDate}
+            />
+          );
+        })}
       </div>
     </section>
   );
