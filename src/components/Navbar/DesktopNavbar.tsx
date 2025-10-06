@@ -12,7 +12,7 @@ import ArrowLeft from "../../../public/ArrowLeft.svg";
 import ArrowRight from "../../../public/ArrowRight.svg";
 
 interface DesktopNavbarProps {
-  navItems: { icon: React.ElementType; label: string }[];
+  navItems: { icon: React.ElementType; label: string; href: string }[];
 }
 
 export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {

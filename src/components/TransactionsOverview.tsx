@@ -1,11 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import type { Transactions } from "@/types/finance";
 import Transaction from "./Transaction";
 import { GoTriangleRight } from "react-icons/go";
 
-export default function Transactions() {
+export default function TransactionsOverview() {
+  const router = useRouter();
   const { data, isLoading, error } = useQuery<Transactions[]>({
     queryKey: ["transactions"],
     queryFn: async () => {
@@ -23,7 +25,9 @@ export default function Transactions() {
     <section className='flex flex-col gap-5 w-full lg:max-w-[700px] bg-white mt-8 px-5 py-6 rounded-[12px]'>
       <div className='flex justify-between'>
         <h2 className='heading-l'>Transactions</h2>
-        <button className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'>
+        <button
+          className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'
+          onClick={() => router.push("/transactions")}>
           View All <GoTriangleRight />
         </button>
       </div>
