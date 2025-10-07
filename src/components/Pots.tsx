@@ -21,7 +21,7 @@ export default function Pots() {
 
   const totalSaved = data?.reduce((acc, pot) => acc + Number(pot.total), 0);
 
-  if (isLoading) return <p>Loading transactions...</p>;
+  if (isLoading) return <p>Loading pots.</p>;
   if (error) return <p>Something went wrong.</p>;
   if (!data) return <p>No transactions found.</p>;
 

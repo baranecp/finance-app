@@ -7,7 +7,7 @@ interface MobileNavbarProps {
 
 export default function MobileNavbar({ navItems }: MobileNavbarProps) {
   return (
-    <section className='w-full bg-grey-900 fixed bottom-0 rounded-t-lg overflow-hidden lg:hidden'>
+    <section className='w-full bg-grey-900 fixed bottom-0 rounded-t-lg overflow-hidden lg:hidden z-50'>
       <nav role='navigation' aria-label='Mobile Navigation'>
         <ul className='flex justify-between px-4 pt-2'>
           {navItems.map((item, idx) => {

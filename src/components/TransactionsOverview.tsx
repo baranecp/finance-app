@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Transactions } from "@/types/finance";
 import Transaction from "./Transaction";
 import { GoTriangleRight } from "react-icons/go";
+import TransactionsSkeleton from "./Skeletons/TransactionsSkeleton";
 
 export default function TransactionsOverview() {
   const router = useRouter();
