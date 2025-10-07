@@ -1,70 +1,82 @@
-import Transaction from "@/components/Transaction";
+import TransactionAll from "@/components/TransactionAll";
 import { db } from "@/db/drizzle";
 import { transactions } from "@/db/schema";
-import { ilike, sql } from "drizzle-orm";
-import { Pagination } from "./Pagination";
+import Pagination from "./Pagination";
 
-const ITEMS_PER_PAGE = 10;
+interface TransactionsListProps {
+  query: string;
+  sortBy: string;
+  category: string;
+  currentPage: number;
+  pageSize: number;
+}
 
 const TransactionsList = async ({
   query,
+  sortBy,
+  category,
   currentPage,
-}: {
-  query: string;
-  currentPage: number;
-}) => {
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  pageSize,
+}: TransactionsListProps) => {
+  let all = await db.select().from(transactions);
 
-  const all = await db
-    .select()
-    .from(transactions)
-    .where(query ? ilike(transactions.name, `%${query}%`) : sql`true`)
-    .limit(ITEMS_PER_PAGE)
-    .offset(offset);
+  if (category && category.toLocaleLowerCase() !== "all") {
+    all = all.filter(
+      (t) => t.category.toLowerCase() === category.toLowerCase()
+    );
+  }
 
-  const filteredTransactions = all
-    ? all.filter((transaction) => {
-        return transaction.name
+  if (query) {
+    all = all.filter((t) => t.name.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  all.sort((a, b) => {
+    switch (sortBy) {
+      case "latest":
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      case "oldest":
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      case "a-z":
+        return a.name
+          .trim()
           .toLowerCase()
-          .includes(query.toLocaleLowerCase());
-      })
-    : [];
+          .localeCompare(b.name.trim().toLowerCase());
+      case "z-a":
+        return b.name
+          .trim()
+          .toLowerCase()
+          .localeCompare(a.name.trim().toLowerCase());
+      case "highest":
+        return +b.amount - +a.amount;
+      case "lowest":
+        return +a.amount - +b.amount;
+      default:
+        return 0;
+    }
+  });
 
-  const totalCount = (
-    await db
-      .select({ count: sql<number>`count(*)` })
-      .from(transactions)
-      .where(query ? ilike(transactions.name, `%${query}%`) : sql`true`)
-  )[0].count;
-
-  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-
+  const totalPages = Math.ceil(all.length / pageSize);
+  const start = (currentPage - 1) * pageSize;
+  const paginatedTransactions = all.slice(start, start + pageSize).map((t) => ({
+    ...t,
+    date: new Date(t.date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+  }));
   return (
     <div>
-      {all && all.length === 0 && <p>No transactions found</p>}
-      {all &&
-        filteredTransactions.map((transaction) => {
-          const formattedDate = new Date(transaction.date).toLocaleDateString(
-            "en-GB",
-            {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            }
-          );
-          return (
-            <Transaction
-              key={transaction.id}
-              id={transaction.id}
-              avatar={transaction.avatar || ""}
-              name={transaction.name}
-              type={transaction.type}
-              amount={transaction.amount}
-              date={formattedDate}
-            />
-          );
-        })}
-
+      {all.length === 0 ? (
+        <p>No transactions found</p>
+      ) : (
+        <TransactionAll
+          transactions={paginatedTransactions.map((t) => ({
+            ...t,
+            avatar: t.avatar || "/default-avatar.png", // fallback image
+          }))}
+        />
+      )}
       <Pagination totalPages={totalPages} currentPage={currentPage} />
     </div>
   );

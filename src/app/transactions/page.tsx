@@ -1,41 +1,41 @@
 import ClientWrapper from "../ClientWrapper";
-import SearchTransactions from "./SearchTransactions";
+import TransactionsControls from "./TransactionsControls";
 import TransactionsList from "./TransactionsList";
 
-const Page = async ({
+const PAGE_SIZE = 10;
+
+export default async function Page({
   searchParams,
 }: {
-  searchParams?: {
-    query?: string;
+  searchParams: Promise<{
     page?: string;
+    query?: string;
     sort?: string;
     category?: string;
-  };
-}) => {
-  const query = searchParams?.query || "";
-  const sortBy = searchParams?.sort || "latest";
-  const category = searchParams?.category || "all";
-  const currentPage =
-    searchParams?.page && !isNaN(parseInt(searchParams.page))
-      ? parseInt(searchParams.page)
-      : 1;
+  }>;
+}) {
+  const { page, query, sort, category } = await searchParams;
+
+  const currentPage = page ? parseInt(page, 10) : 1;
+  const searchQuery = query || "";
+  const sortBy = sort || "latest";
+  const filterCategory = category || "all";
 
   return (
     <div className='flex h-screen bg-beige-100'>
       <ClientWrapper>
         <h1 className='heading-xl mb-8'>Transactions</h1>
         <section className='bg-white p-8 rounded-xl'>
-          <SearchTransactions />
+          <TransactionsControls />
           <TransactionsList
-            query={query}
+            query={searchQuery}
             currentPage={currentPage}
             sortBy={sortBy}
-            category={currentPage}
+            category={filterCategory}
+            pageSize={PAGE_SIZE}
           />
         </section>
       </ClientWrapper>
     </div>
   );
-};
-
-export default Page;
+}
