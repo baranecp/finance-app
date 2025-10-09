@@ -1,84 +1,54 @@
+"use client";
+import useTransactions from "@/hooks/useTransactions";
 import TransactionAll from "@/components/TransactionAll";
-import { db } from "@/db/drizzle";
-import { transactions } from "@/db/schema";
-import Pagination from "./Pagination";
+import Pagination from "@/components/Pagination";
 
 interface TransactionsListProps {
-  query: string;
-  sortBy: string;
-  category: string;
-  currentPage: number;
-  pageSize: number;
+  query?: string;
+  sortBy?: string;
+  category?: string;
+  page: number;
+  pageSize?: number;
 }
 
-const TransactionsList = async ({
+export default function TransactionsList({
   query,
   sortBy,
   category,
-  currentPage,
-  pageSize,
-}: TransactionsListProps) => {
-  let all = await db.select().from(transactions);
-
-  if (category && category.toLocaleLowerCase() !== "all") {
-    all = all.filter(
-      (t) => t.category.toLowerCase() === category.toLowerCase()
-    );
-  }
-
-  if (query) {
-    all = all.filter((t) => t.name.toLowerCase().includes(query.toLowerCase()));
-  }
-
-  all.sort((a, b) => {
-    switch (sortBy) {
-      case "latest":
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      case "oldest":
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      case "a-z":
-        return a.name
-          .trim()
-          .toLowerCase()
-          .localeCompare(b.name.trim().toLowerCase());
-      case "z-a":
-        return b.name
-          .trim()
-          .toLowerCase()
-          .localeCompare(a.name.trim().toLowerCase());
-      case "highest":
-        return +b.amount - +a.amount;
-      case "lowest":
-        return +a.amount - +b.amount;
-      default:
-        return 0;
-    }
+  page,
+  pageSize = 10,
+}: TransactionsListProps) {
+  const { data, isLoading } = useTransactions({
+    query,
+    sortBy,
+    category,
+    page,
+    pageSize,
   });
 
-  const totalPages = Math.ceil(all.length / pageSize);
-  const start = (currentPage - 1) * pageSize;
-  const paginatedTransactions = all.slice(start, start + pageSize).map((t) => ({
-    ...t,
-    date: new Date(t.date).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }),
-  }));
+  if (isLoading) return <p>Loading...</p>;
+
+  const transactionsWithFormattedDate =
+    data?.data.map((t) => ({
+      ...t,
+      date: new Date(t.date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+      avatar: t.avatar || "/default-avatar.png", // fallback
+    })) || []; // <-- ensures this is always an array
+
   return (
     <div>
-      {all.length === 0 ? (
+      {transactionsWithFormattedDate.length === 0 ? (
         <p>No transactions found</p>
       ) : (
-        <TransactionAll
-          transactions={paginatedTransactions.map((t) => ({
-            ...t,
-            avatar: t.avatar || "/default-avatar.png", // fallback image
-          }))}
-        />
+        <TransactionAll transactions={transactionsWithFormattedDate} />
       )}
-      <Pagination totalPages={totalPages} currentPage={currentPage} />
+      {data?.totalPages && data.totalPages > 1 && (
+        <Pagination totalPages={data.totalPages} currentPage={page} />
+      )}
     </div>
   );
-};
-export default TransactionsList;
+}

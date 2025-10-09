@@ -1,8 +1,15 @@
 "use server";
 import { db } from "@/db/drizzle";
-import { pots } from "@/db/schema";
+import { pots, transactions } from "@/db/schema";
 import { desc } from "drizzle-orm";
 
+interface FetchTransactionsOptions {
+  query?: string;
+  sortBy?: string;
+  category?: string;
+  page?: number;
+  pageSize?: number;
+}
 export async function getPots({
   queryKey,
 }: {
@@ -19,4 +26,69 @@ export async function getPots({
   } catch (error) {
     return { error };
   }
+}
+export async function fetchTransactions({
+  query,
+  sortBy = "latest",
+  category = "all",
+  page = 1,
+  pageSize = 10,
+}: FetchTransactionsOptions) {
+  let all = await db.select().from(transactions);
+
+  // Filter by category
+  if (category.toLowerCase() !== "all") {
+    all = all.filter(
+      (t) => t.category.toLowerCase() === category.toLowerCase()
+    );
+  }
+
+  // Filter by search query
+  if (query) {
+    all = all.filter((t) => t.name.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  // Sort
+  all.sort((a, b) => {
+    switch (sortBy) {
+      case "latest":
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      case "oldest":
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      case "a-z":
+        return a.name
+          .trim()
+          .toLowerCase()
+          .localeCompare(b.name.trim().toLowerCase());
+      case "z-a":
+        return b.name
+          .trim()
+          .toLowerCase()
+          .localeCompare(a.name.trim().toLowerCase());
+      case "highest":
+        return +b.amount - +a.amount;
+      case "lowest":
+        return +a.amount - +b.amount;
+      default:
+        return 0;
+    }
+  });
+
+  const totalPages = Math.ceil(all.length / pageSize);
+  const start = (page - 1) * pageSize;
+
+  const paginatedTransactions = all.slice(start, start + pageSize).map((t) => ({
+    ...t,
+    date: t.date,
+  }));
+
+  return { data: paginatedTransactions, totalPages };
+}
+
+export async function fetchCategories() {
+  const all = await db
+    .select({ category: transactions.category })
+    .from(transactions);
+  const unique = Array.from(new Set(all.map((t) => t.category)));
+  return unique;
 }
