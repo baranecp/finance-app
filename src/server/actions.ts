@@ -92,3 +92,22 @@ export async function fetchCategories() {
   const unique = Array.from(new Set(all.map((t) => t.category)));
   return unique;
 }
+export async function fetchLatestTransactions() {
+  const latest = await db
+    .select()
+    .from(transactions)
+    .orderBy(desc(transactions.date))
+    .limit(5);
+
+  const formatted = latest.map((t) => ({
+    ...t,
+    avatar: t.avatar || "/default-avatar.png", // fallback for null
+    date: new Date(t.date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
+  }));
+
+  return formatted;
+}

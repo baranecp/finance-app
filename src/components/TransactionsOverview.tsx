@@ -5,17 +5,13 @@ import { useRouter } from "next/navigation";
 import type { Transactions } from "@/types/finance";
 import Transaction from "./Transaction";
 import { GoTriangleRight } from "react-icons/go";
-import TransactionsSkeleton from "./Skeletons/TransactionsSkeleton";
+import { fetchLatestTransactions } from "@/server/actions";
 
 export default function TransactionsOverview() {
   const router = useRouter();
   const { data, isLoading, error } = useQuery<Transactions[]>({
     queryKey: ["transactions"],
-    queryFn: async () => {
-      const res = await fetch("/api/transactions");
-      if (!res.ok) throw new Error("Failed to fetch transactions");
-      return res.json();
-    },
+    queryFn: fetchLatestTransactions,
   });
 
   if (isLoading) return <p>Loading transactions...</p>;
