@@ -22,10 +22,12 @@ type TransactionsPageProps = {
 export default async function TransactionsPage({
   searchParams,
 }: TransactionsPageProps) {
-  const query = searchParams.query || "";
-  const sortBy = searchParams.sortBy || "latest";
-  const category = searchParams.category || "all";
-  const currentPage = Number(searchParams.page) || 1;
+  const params = await searchParams;
+
+  const query = params.query || "";
+  const sortBy = params.sortBy || "latest";
+  const category = params.category || "all";
+  const currentPage = Number(params.page) || 1;
 
   const queryClient = new QueryClient();
 

@@ -5,7 +5,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import Pot from "./Pot";
+import PotsList from "./PotsList";
 
 export default async function Page() {
   const queryClient = new QueryClient();
@@ -16,9 +16,17 @@ export default async function Page() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ClientWrapper>
-        <Pot />
-      </ClientWrapper>
+      <div className='flex h-screen bg-beige-100'>
+        <ClientWrapper>
+          <div className='flex justify-between mb-8'>
+            <h1 className='heading-xl'>Pots</h1>
+            <button className='body-m-bold bg-grey-900 p-4 text-white border rounded-[8px] cursor-pointer'>
+              + Add New Pot
+            </button>
+          </div>
+          <PotsList />
+        </ClientWrapper>
+      </div>
     </HydrationBoundary>
   );
 }

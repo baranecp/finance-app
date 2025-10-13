@@ -1,19 +1,59 @@
 "use client";
+import { SlOptions } from "react-icons/sl";
 
-import { getPots } from "@/server/actions";
-import { useQuery } from "@tanstack/react-query";
+type PotProps = {
+  name?: string;
+  total?: number;
+  target?: number;
+  theme?: string;
+  percentage?: number;
+};
 
-export default function Pot() {
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["pots"],
-    queryFn: getPots,
-  });
-  if (error) <h2>{error.message}</h2>;
-  if (isLoading) <h2>Fetching data...</h2>;
-  if (data)
-    return (
-      <div>
-        <h1>{data.data?.map((pot) => pot.name)}</h1>
+export default function Pot({
+  theme,
+  name,
+  total,
+  target,
+  percentage,
+}: PotProps) {
+  return (
+    <div className='bg-white  p-6 flex flex-col gap-11 rounded-[12px]'>
+      <div className='flex justify-between items-center '>
+        <h1
+          className={`relative heading-l inline-flex items-center gap-4 before:content-[""] before:bg-[color:var(--theme)]  before:w-5 before:h-5  before:rounded-full`}
+          style={{ "--theme": theme } as React.CSSProperties}>
+          {name}
+        </h1>
+        <SlOptions className='cursor-pointer text-grey-300' />
       </div>
-    );
+      <div>
+        <div className='flex justify-between items-center mb-4'>
+          <h2 className='text-grey-500 body-m'>Total Saved</h2>
+          <h2 className='text-grey-900 heading-xl'>${total}</h2>
+        </div>
+        <div className='w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700'>
+          <div
+            className='bg-[color:var(--theme)] h-2.5 rounded-full'
+            style={
+              {
+                "--theme": theme,
+                width: percentage + "%",
+              } as React.CSSProperties
+            }></div>
+        </div>
+        <div className='flex justify-between items-center mt-3'>
+          <p>%{percentage}</p>
+          <p>Target of ${target}</p>
+        </div>
+      </div>
+      <div className='w-full flex justify-around gap-4'>
+        <button className='p-4 flex-1 bg-beige-100 body-m-bold rounded-[8px] cursor-pointer'>
+          + Add Money
+        </button>
+        <button className='p-4 flex-1 bg-beige-100 body-m-bold rounded-[8px] cursor-pointer'>
+          Withdraw
+        </button>
+      </div>
+    </div>
+  );
 }
