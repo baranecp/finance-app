@@ -2,6 +2,7 @@
 import { db } from "@/db/drizzle";
 import { pots, transactions } from "@/db/schema";
 import { desc } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 interface FetchTransactionsOptions {
   query?: string;
@@ -10,6 +11,7 @@ interface FetchTransactionsOptions {
   page?: number;
   pageSize?: number;
 }
+
 export async function getPots({
   queryKey,
 }: {
@@ -27,6 +29,30 @@ export async function getPots({
     return { error };
   }
 }
+
+export async function updatePotTotal(
+  id: string,
+  amount: number,
+  type: "add" | "withdraw"
+) {
+  try {
+    const sign = type === "add" ? "+" : "-";
+
+    const [updatedPot] = await db
+      .update(pots)
+      .set({
+        total: sql`${pots.total} ${sql.raw(sign)} ${amount}`,
+      })
+      .where(eq(pots.id, id))
+      .returning();
+
+    return { data: updatedPot };
+  } catch (error) {
+    console.error("Error updating pot total:", error);
+    return { error };
+  }
+}
+
 export async function fetchTransactions({
   query,
   sortBy = "latest",

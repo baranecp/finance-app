@@ -1,12 +1,16 @@
 "use client";
+
 import { SlOptions } from "react-icons/sl";
 
 type PotProps = {
+  id?: string;
   name?: string;
   total?: number;
   target?: number;
   theme?: string;
   percentage?: number;
+  onAddMoney: () => void;
+  onWithdraw: () => void;
 };
 
 export default function Pot({
@@ -15,6 +19,8 @@ export default function Pot({
   total,
   target,
   percentage,
+  onAddMoney,
+  onWithdraw,
 }: PotProps) {
   return (
     <div className='bg-white  p-6 flex flex-col gap-11 rounded-[12px]'>
@@ -39,7 +45,8 @@ export default function Pot({
                 "--theme": theme,
                 width: percentage + "%",
               } as React.CSSProperties
-            }></div>
+            }
+          />
         </div>
         <div className='flex justify-between items-center mt-3'>
           <p>%{percentage}</p>
@@ -47,10 +54,14 @@ export default function Pot({
         </div>
       </div>
       <div className='w-full flex justify-around gap-4'>
-        <button className='p-4 flex-1 bg-beige-100 body-m-bold rounded-[8px] cursor-pointer'>
+        <button
+          onClick={onAddMoney}
+          className='p-4 flex-1 bg-beige-100 body-m-bold rounded-[8px] cursor-pointer'>
           + Add Money
         </button>
-        <button className='p-4 flex-1 bg-beige-100 body-m-bold rounded-[8px] cursor-pointer'>
+        <button
+          onClick={onWithdraw}
+          className='p-4 flex-1 bg-beige-100 body-m-bold rounded-[8px] cursor-pointer'>
           Withdraw
         </button>
       </div>
