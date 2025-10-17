@@ -2,46 +2,32 @@
 import { FaDollarSign } from "react-icons/fa6";
 import { useState } from "react";
 import Modal from "@/components/Modal";
+import { useModalStore } from "@/store/modalStore";
+import { usePots } from "@/hooks/usePots";
+import { usePotModal } from "@/hooks/usePotModal";
 
-type Pot = {
-  id: string;
-  name: string;
-  total: number;
-  target: number;
-  theme: string;
-};
-
-export default function PotActionModal({
-  pot,
-  type,
-  mutation,
-  availableBalance = 4835,
-  onClose,
-}: {
-  pot: Pot;
-  type: "add" | "withdraw";
-  mutation: {
-    mutate: (variables: {
-      id: string;
-      amount: number;
-      type: "add" | "withdraw";
-    }) => void;
-    isPending: boolean;
-  };
-  availableBalance?: number;
-  onClose: () => void;
-}) {
+export default function PotActionModal() {
   const [amount, setAmount] = useState("");
+  const { isOpen, type, selectedPotId, close } = useModalStore();
+  const { pots } = usePots();
+  const { actionMutation } = usePotModal();
+
+  const pot = pots.find((p) => p.id === selectedPotId);
+  const availableBalance = 4835;
+
+  if (!isOpen || !pot || !type) return null;
 
   const handleConfirm = () => {
     if (!amount) return;
-    mutation.mutate({ id: pot.id, amount: Number(amount), type });
+    if (type !== "add" && type !== "withdraw") return;
+    actionMutation.mutate({ id: pot.id, amount: Number(amount), type });
   };
 
   const withdrawInvalid = type === "withdraw" && Number(amount) > pot.total;
   const addExceedsTarget =
     type === "add" && Number(amount) + pot.total > pot.target;
   const addExceedsBalance = type === "add" && Number(amount) > availableBalance;
+
   const percentage = Number(((pot.total / pot.target) * 100).toFixed(2));
   const addPercentage = Number(
     ((Number(amount) / pot.target) * 100).toFixed(2)
@@ -53,8 +39,8 @@ export default function PotActionModal({
 
   return (
     <Modal
-      isOpen={!!pot}
-      onClose={onClose}
+      isOpen={isOpen}
+      onClose={close}
       title={
         type === "add" ? `Add to '${pot.name}'` : `Withdraw from '${pot.name}'`
       }>
@@ -62,8 +48,9 @@ export default function PotActionModal({
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus
         hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet.
       </p>
-      <div className='flex justify-between items-center'>
-        <p className='text-beige-500 body-m'>New Amount</p>
+
+      <div className='flex justify-between items-center pb-4'>
+        <p className='text-grey-500 body-m'>New Amount</p>
         <p className='text-grey-900 heading-xl'>
           $
           {type === "add"
@@ -71,37 +58,28 @@ export default function PotActionModal({
             : Number(pot.total.toFixed(2)) - Number(amount)}
         </p>
       </div>
+
       <div className='w-full bg-gray-100 rounded-full h-2.5'>
         <div className='relative w-full h-2.5 rounded-full overflow-hidden'>
           <div
             className='absolute left-0 top-0 h-full bg-black rounded-full'
-            style={{
-              width: `${formattedPercentage}%`,
-            }}
+            style={{ width: `${formattedPercentage}%` }}
           />
-
-          {/* Divider line */}
           {type === "add" && addPercentage > 0 && (
             <div
               className='absolute top-0 h-full w-[2px] bg-white shadow-sm z-10'
-              style={{
-                left: `${formattedPercentage}%`,
-              }}
+              style={{ left: `${formattedPercentage}%` }}
             />
           )}
-
           {type === "withdraw" &&
             addPercentage > 0 &&
             +formattedWithdrawStart !== 0 &&
             +formattedWithdrawStart <= 1 && (
               <div
                 className='absolute top-0 h-full w-[2px] bg-white shadow-sm z-10'
-                style={{
-                  left: `${formattedWithdrawStart}%`,
-                }}
+                style={{ left: `${formattedWithdrawStart}%` }}
               />
             )}
-
           {type === "add" && (
             <div
               className='absolute top-0 h-full bg-green-600 rounded-r-full transition-all duration-100'
@@ -111,7 +89,6 @@ export default function PotActionModal({
               }}
             />
           )}
-
           {type === "withdraw" && (
             <div
               className='absolute top-0 h-full bg-red-500 rounded-full transition-all duration-100'
@@ -123,13 +100,17 @@ export default function PotActionModal({
           )}
         </div>
       </div>
-      <p className={type === "add" ? "text-green-900" : "text-red-900"}>
-        {type === "add"
-          ? (percentage + addPercentage).toFixed(2)
-          : (percentage - addPercentage).toFixed(2)}
-        %
-      </p>
-      <p>Target: ${pot.target.toFixed(2)}</p>
+      <div className='flex justify-between pt-4'>
+        <p className={type === "add" ? "text-green-900" : "text-red-900"}>
+          {type === "add"
+            ? (percentage + addPercentage).toFixed(2)
+            : (percentage - addPercentage).toFixed(2)}
+          %
+        </p>
+
+        <p className='text-grey-500'>Target: ${pot.target.toFixed(2)}</p>
+      </div>
+
       <div className='w-full mt-4'>
         <label className='body-m-bold text-grey-500 mb-1 block'>
           Amount to {type === "add" ? "Add" : "Withdraw"}
@@ -144,7 +125,7 @@ export default function PotActionModal({
             placeholder='Enter amount'
             min='0'
           />
-        </div>{" "}
+        </div>
       </div>
 
       {withdrawInvalid && (
@@ -166,14 +147,14 @@ export default function PotActionModal({
       <button
         onClick={handleConfirm}
         disabled={
-          mutation.isPending ||
+          actionMutation.isPending ||
           !amount ||
           withdrawInvalid ||
           addExceedsTarget ||
           addExceedsBalance
         }
         className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900'>
-        {mutation.isPending
+        {actionMutation.isPending
           ? "Processing..."
           : `Confirm ${type === "add" ? "Addition" : "Withdrawal"}`}
       </button>
