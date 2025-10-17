@@ -53,6 +53,15 @@ export async function updatePotTotal(
   }
 }
 
+export async function createPot(name: string, theme: string, target: number) {
+  await db.insert(pots).values({
+    name,
+    theme,
+    target: target.toString(),
+    total: "0",
+  });
+}
+
 export async function fetchTransactions({
   query,
   sortBy = "latest",
