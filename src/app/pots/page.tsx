@@ -1,4 +1,5 @@
 import { getPots } from "@/server/actions";
+import AddPotButton from "../pots/AddPotButton";
 import ClientWrapper from "../ClientWrapper";
 import {
   dehydrate,
@@ -6,6 +7,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import PotsList from "./PotsList";
+import PotForm from "./PotForm";
 
 export default async function Page() {
   const queryClient = new QueryClient();
@@ -20,10 +22,9 @@ export default async function Page() {
         <ClientWrapper>
           <div className='flex justify-between mb-8'>
             <h1 className='heading-xl'>Pots</h1>
-            <button className='body-m-bold bg-grey-900 p-4 text-white border rounded-[8px] cursor-pointer'>
-              + Add New Pot
-            </button>
+            <AddPotButton />
           </div>
+          <PotForm />
           <PotsList />
         </ClientWrapper>
       </div>
