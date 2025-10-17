@@ -1,10 +1,20 @@
 "use client";
 
-import Select from "react-select";
+import Select, { SingleValue } from "react-select";
 import { useState } from "react";
 import { usePots } from "@/hooks/usePots";
 
-export default function ThemeSelect({ value, onChange }) {
+interface ThemeSelectProps {
+  value: string | null;
+  onChange: (value: string) => void;
+}
+
+interface ThemeOption {
+  value: string;
+  label: string;
+}
+
+export default function ThemeSelect({ value, onChange }: ThemeSelectProps) {
   const { pots } = usePots();
 
   const usedThemes = pots.map((pot) => pot.theme);
@@ -23,9 +33,9 @@ export default function ThemeSelect({ value, onChange }) {
     options.find((o) => o.value === value) || null
   );
 
-  const handleChange = (option: any) => {
+  const handleChange = (option: SingleValue<ThemeOption | null>) => {
     setSelected(option);
-    onChange(option.value);
+    if (option) onChange(option.value);
   };
 
   return (
