@@ -3,13 +3,27 @@ import { useState } from "react";
 import { useModalStore } from "@/store/modalStore";
 import { SlOptions } from "react-icons/sl";
 
-export default function PotDropdownButton({ potId }: { potId: string }) {
-  const { open, setSelectedPotId } = useModalStore();
+type Pot = {
+  id: string;
+  name: string;
+  total: number;
+  target: number;
+  theme?: string;
+  percentage?: number;
+};
+
+export default function PotDropdownButton({ pot }: { pot: Pot }) {
+  const { open } = useModalStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = (type: "edit" | "delete") => {
-    setSelectedPotId(potId);
-    open(type, potId);
+    open(type, {
+      id: pot.id,
+      name: pot.name,
+      target: pot.target ?? 0,
+      total: pot.total ?? 0,
+      theme: pot.theme ?? "defaultTheme",
+    });
     setIsOpen(false);
   };
 

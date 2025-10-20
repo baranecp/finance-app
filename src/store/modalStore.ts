@@ -1,21 +1,36 @@
 import { create } from "zustand";
 
-type ModalType = "add" | "withdraw" | "create" | "edit" | "delete" | null;
+export type ModalType =
+  | "add"
+  | "withdraw"
+  | "create"
+  | "edit"
+  | "delete"
+  | null;
+
+export type Pot = {
+  id: string;
+  name: string;
+  total: number;
+  target: number;
+  theme: string;
+  percentage?: number;
+};
 
 type ModalState = {
   type: ModalType;
-  selectedPotId?: string | null;
+  selectedPot?: Pot | null;
   isOpen: boolean;
-  open: (type: ModalType, potId?: string | null) => void;
+  open: (type: ModalType, pot?: Pot | null) => void;
   close: () => void;
-  setSelectedPotId: (id: string) => void;
+  setSelectedPot: (pot: Pot | null) => void;
 };
 
 export const useModalStore = create<ModalState>((set) => ({
   type: null,
-  selectedPotId: undefined,
+  selectedPot: null,
   isOpen: false,
-  open: (type, id) => set({ type, selectedPotId: id, isOpen: true }),
-  close: () => set({ type: null, selectedPotId: undefined, isOpen: false }),
-  setSelectedPotId: (id) => set({ selectedPotId: id }),
+  open: (type, pot) => set({ type, selectedPot: pot ?? null, isOpen: true }),
+  close: () => set({ type: null, selectedPot: null, isOpen: false }),
+  setSelectedPot: (pot) => set({ selectedPot: pot }),
 }));

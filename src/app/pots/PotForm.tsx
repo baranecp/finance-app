@@ -28,7 +28,7 @@ export default function PotForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditing && selectedPot) {
-      updateMutation.mutate({ potId: selectedPot.id, data: formData });
+      updateMutation.mutate({ pot: selectedPot!, data: formData });
     } else {
       createMutation.mutate(formData);
     }
@@ -55,7 +55,9 @@ export default function PotForm() {
               type='text'
               placeholder='e.g. Rainy Days'
               value={formData.name}
-              onChange={(e) => setFormData({ name: e.target.value })}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, name: e.target.value }))
+              }
               className='w-full border p-2 pl-6 rounded text-grey-900 body-m'
             />
           </div>
@@ -70,7 +72,9 @@ export default function PotForm() {
                 type='number'
                 placeholder='Target amount'
                 value={formData.target || ""}
-                onChange={(e) => setFormData({ target: +e.target.value })}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, target: +e.target.value }))
+                }
                 className='w-full border p-2 pl-6 rounded text-grey-900'
               />
             </div>
@@ -82,7 +86,9 @@ export default function PotForm() {
             </label>
             <ThemeSelect
               value={formData.theme}
-              onChange={(value) => setFormData({ theme: value })}
+              onChange={(value) =>
+                setFormData((prev) => ({ ...prev, theme: value }))
+              }
             />
           </div>
         </div>

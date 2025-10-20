@@ -26,7 +26,9 @@ type PotsState = {
     newTarget: number,
     newTheme: string
   ) => void;
-  setFormData: (data: Partial<PotFormData>) => void;
+  setFormData: (
+    data: Partial<PotFormData> | ((prev: PotFormData) => PotFormData)
+  ) => void;
   resetForm: () => void;
 };
 
@@ -52,7 +54,10 @@ export const usePotsStore = create<PotsState>((set) => ({
   formData: { name: "", theme: "", target: 0 },
   setFormData: (data) =>
     set((state) => ({
-      formData: { ...state.formData, ...data },
+      formData:
+        typeof data === "function"
+          ? { ...state.formData, ...data(state.formData) }
+          : { ...state.formData, ...data },
     })),
   resetForm: () => set({ formData: { name: "", theme: "", target: 0 } }),
 }));

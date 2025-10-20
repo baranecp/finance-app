@@ -3,16 +3,14 @@ import { FaDollarSign } from "react-icons/fa6";
 import { useState } from "react";
 import Modal from "@/components/Modal";
 import { useModalStore } from "@/store/modalStore";
-import { usePots } from "@/hooks/usePots";
 import { usePotModal } from "@/hooks/usePotModal";
 
 export default function PotActionModal() {
   const [amount, setAmount] = useState("");
-  const { isOpen, type, selectedPotId, close } = useModalStore();
-  const { pots } = usePots();
+  const { isOpen, type, selectedPot, close } = useModalStore();
   const { actionMutation } = usePotModal();
 
-  const pot = pots.find((p) => p.id === selectedPotId);
+  const pot = selectedPot;
   const availableBalance = 4835;
 
   if (!isOpen || !pot || !type) return null;
@@ -48,7 +46,7 @@ export default function PotActionModal() {
       return;
     if (type !== "add" && type !== "withdraw") return;
     actionMutation.mutate({
-      id: pot.id,
+      pot: pot,
       amount: numericAmount,
       type: type as "add" | "withdraw",
     });

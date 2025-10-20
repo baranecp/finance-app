@@ -17,9 +17,9 @@ export default function PotsList() {
         {pots.map((pot) => (
           <Pot
             key={pot.id}
-            {...pot}
-            onAddMoney={() => open("add", pot.id)}
-            onWithdraw={() => open("withdraw", pot.id)}
+            pot={pot}
+            onAddMoney={() => open("add", pot)}
+            onWithdraw={() => open("withdraw", pot)}
           />
         ))}
       </div>

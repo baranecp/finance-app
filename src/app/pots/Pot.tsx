@@ -2,26 +2,21 @@
 import PotDropdownButton from "./PotDropdownButton";
 
 type PotProps = {
-  id: string;
-  name: string;
-  total?: number;
-  target?: number;
-  theme?: string;
-  percentage?: number;
+  pot: {
+    id: string;
+    name: string;
+    total: number;
+    target: number;
+    theme?: string;
+    percentage?: number;
+  };
   onAddMoney: () => void;
   onWithdraw: () => void;
 };
 
-export default function Pot({
-  id,
-  theme,
-  name,
-  total,
-  target,
-  percentage,
-  onAddMoney,
-  onWithdraw,
-}: PotProps) {
+export default function Pot({ pot, onAddMoney, onWithdraw }: PotProps) {
+  const { name, total, target, theme, percentage } = pot;
+
   return (
     <div className='bg-white  p-6 flex flex-col gap-11 rounded-[12px]'>
       <div className='flex justify-between items-center '>
@@ -30,7 +25,7 @@ export default function Pot({
           style={{ "--theme": theme } as React.CSSProperties}>
           {name}
         </h1>
-        <PotDropdownButton potId={id} />
+        <PotDropdownButton pot={pot} />
       </div>
       <div>
         <div className='flex justify-between items-center mb-4'>

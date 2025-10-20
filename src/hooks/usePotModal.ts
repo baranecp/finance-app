@@ -1,42 +1,42 @@
 "use client";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  updatePotTotal,
   createPot,
   updatePot,
+  updatePotTotal,
   deletePot,
 } from "@/server/actions";
-import { useModalStore } from "@/store/modalStore";
+import { useModalStore, Pot } from "@/store/modalStore";
 import { usePotsStore } from "@/store/potsStore";
-import { usePots } from "@/hooks/usePots";
 
-type PotActionType = "add" | "withdraw";
+export type PotActionType = "add" | "withdraw";
 
 export function usePotModal() {
   const queryClient = useQueryClient();
-  const { type, selectedPotId, close } = useModalStore();
+  const { type, selectedPot, close } = useModalStore();
   const { formData, resetForm } = usePotsStore();
-  const { pots } = usePots();
-  const selectedPot = pots.find((p) => p.id === selectedPotId);
 
-  // Action mutation (add/withdraw)
+  const isEditing = type === "edit";
+
+  // --- Action mutation (add/withdraw money) ---
   const actionMutation = useMutation({
     mutationFn: async ({
-      id,
+      pot,
       amount,
       type,
     }: {
-      id: string;
+      pot: Pot;
       amount: number;
       type: PotActionType;
-    }) => updatePotTotal(id, amount, type),
+    }) => updatePotTotal(pot.id, amount, type),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pots"] });
       close();
     },
   });
 
-  // Create mutation (create new pot)
+  // --- Create mutation ---
   const createMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
       await createPot(data.name, data.theme, data.target);
@@ -48,13 +48,10 @@ export function usePotModal() {
     },
   });
 
-  // Update mutation
-  const isEditing = type === "edit";
-
+  // --- Update mutation ---
   const updateMutation = useMutation({
-    mutationFn: async (payload: { potId: string; data: typeof formData }) => {
-      const { potId, data } = payload;
-      await updatePot(potId, data);
+    mutationFn: async (payload: { pot: Pot; data: typeof formData }) => {
+      await updatePot(payload.pot.id, payload.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pots"] });
@@ -63,9 +60,9 @@ export function usePotModal() {
     },
   });
 
-  //Delete mutation
+  // --- Delete mutation ---
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => deletePot(id),
+    mutationFn: async (pot: Pot) => deletePot(pot.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pots"] });
       close();
@@ -76,11 +73,10 @@ export function usePotModal() {
     type,
     isEditing,
     selectedPot,
-    updateMutation,
-    deleteMutation,
-    selectedPotId,
-    close,
     actionMutation,
     createMutation,
+    updateMutation,
+    deleteMutation,
+    close,
   };
 }
