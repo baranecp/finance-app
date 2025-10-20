@@ -20,6 +20,12 @@ type PotsState = {
   formData: PotFormData;
   setPots: (pots: Pot[]) => void;
   updatePotTotal: (id: string, newTotal: number) => void;
+  updatePot: (
+    id: string,
+    newName: string,
+    newTarget: number,
+    newTheme: string
+  ) => void;
   setFormData: (data: Partial<PotFormData>) => void;
   resetForm: () => void;
 };
@@ -31,6 +37,15 @@ export const usePotsStore = create<PotsState>((set) => ({
     set((state) => ({
       pots: state.pots.map((pot) =>
         pot.id === id ? { ...pot, total: newTotal } : pot
+      ),
+    }));
+  },
+  updatePot: (id, newName, newTarget, newTheme) => {
+    set((state) => ({
+      pots: state.pots.map((pot) =>
+        pot.id === id
+          ? { ...pot, name: newName, target: newTarget, theme: newTheme }
+          : pot
       ),
     }));
   },

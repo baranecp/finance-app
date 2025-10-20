@@ -53,6 +53,31 @@ export async function updatePotTotal(
   }
 }
 
+export async function updatePot(
+  id: string,
+  data: {
+    name?: string;
+    target?: number;
+    theme?: string;
+  }
+) {
+  try {
+    await db
+      .update(pots)
+      .set({
+        ...(data.name && { name: data.name }),
+        ...(data.target && { target: data.target.toString() }),
+        ...(data.theme && { theme: data.theme }),
+      })
+      .where(eq(pots.id, id));
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update pot:", error);
+    throw new Error("Failed to update pot");
+  }
+}
+
 export async function createPot(name: string, theme: string, target: number) {
   await db.insert(pots).values({
     name,

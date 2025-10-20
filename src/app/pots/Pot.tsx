@@ -1,10 +1,9 @@
 "use client";
-
-import { SlOptions } from "react-icons/sl";
+import PotDropdownButton from "./PotDropdownButton";
 
 type PotProps = {
-  id?: string;
-  name?: string;
+  id: string;
+  name: string;
   total?: number;
   target?: number;
   theme?: string;
@@ -14,6 +13,7 @@ type PotProps = {
 };
 
 export default function Pot({
+  id,
   theme,
   name,
   total,
@@ -30,7 +30,7 @@ export default function Pot({
           style={{ "--theme": theme } as React.CSSProperties}>
           {name}
         </h1>
-        <SlOptions className='cursor-pointer text-grey-300' />
+        <PotDropdownButton potId={id} />
       </div>
       <div>
         <div className='flex justify-between items-center mb-4'>

@@ -5,21 +5,42 @@ import Modal from "@/components/Modal";
 import { useModalStore } from "@/store/modalStore";
 import { FaDollarSign } from "react-icons/fa6";
 import ThemeSelect from "@/components/ThemeSelect";
+import { useEffect } from "react";
 
 export default function PotForm() {
-  const { formData, setFormData } = usePotsStore();
-  const { createMutation } = usePotModal();
-  const { isOpen, type, close } = useModalStore();
+  const { formData, setFormData, resetForm } = usePotsStore();
+  const { createMutation, updateMutation, isEditing, selectedPot } =
+    usePotModal();
+  const { type, isOpen, close } = useModalStore();
 
-  if (!isOpen || type !== "create") return null;
+  useEffect(() => {
+    if (isEditing && selectedPot) {
+      setFormData({
+        name: selectedPot.name,
+        target: selectedPot.target,
+        theme: selectedPot.theme,
+      });
+    } else {
+      resetForm();
+    }
+  }, [isEditing, selectedPot, setFormData, resetForm]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createMutation.mutate(formData);
+    if (isEditing && selectedPot) {
+      updateMutation.mutate({ potId: selectedPot.id, data: formData });
+    } else {
+      createMutation.mutate(formData);
+    }
   };
 
+  if (!isOpen || (type !== "edit" && type !== "create")) return null;
+
   return (
-    <Modal title='Add New Pot' isOpen={isOpen} onClose={close}>
+    <Modal
+      title={isEditing ? "Edit Pot" : "Add New Pot"}
+      isOpen={isOpen}
+      onClose={close}>
       <p className='text-grey-500 body-m max-w-[480px] mb-5'>
         Create a pot to set savings targets. These can help keep you on track as
         you save for special purchases.
@@ -68,9 +89,15 @@ export default function PotForm() {
 
         <button
           type='submit'
-          disabled={createMutation.isPending}
+          disabled={createMutation.isPending || updateMutation.isPending}
           className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900 cursor-pointer'>
-          {createMutation.isPending ? "Creating..." : "Create Pot"}
+          {isEditing
+            ? updateMutation.isPending
+              ? "Editing..."
+              : "Edit Pot"
+            : createMutation.isPending
+            ? "Creating..."
+            : "Create Pot"}
         </button>
       </form>
     </Modal>
