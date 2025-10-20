@@ -17,25 +17,49 @@ export default function PotActionModal() {
 
   if (!isOpen || !pot || !type) return null;
 
-  const handleConfirm = () => {
-    if (!amount) return;
-    if (type !== "add" && type !== "withdraw") return;
-    actionMutation.mutate({ id: pot.id, amount: Number(amount), type });
-  };
-
-  const withdrawInvalid = type === "withdraw" && Number(amount) > pot.total;
-  const addExceedsTarget =
-    type === "add" && Number(amount) + pot.total > pot.target;
-  const addExceedsBalance = type === "add" && Number(amount) > availableBalance;
-
+  // --- Computed values ---
+  const numericAmount = Number(amount);
   const percentage = Number(((pot.total / pot.target) * 100).toFixed(2));
-  const addPercentage = Number(
-    ((Number(amount) / pot.target) * 100).toFixed(2)
-  );
+  const addPercentage = Number(((numericAmount / pot.target) * 100).toFixed(2));
+  const withdrawStart = Math.max(percentage - addPercentage, 0);
+
   const formattedPercentage = percentage.toFixed(2);
   const formattedAddPercentage = addPercentage.toFixed(2);
-  const withdrawStart = Math.max(percentage - addPercentage, 0);
   const formattedWithdrawStart = withdrawStart.toFixed(2);
+
+  const withdrawInvalid = type === "withdraw" && numericAmount > pot.total;
+  const addExceedsTarget =
+    type === "add" && numericAmount + pot.total > pot.target;
+  const addExceedsBalance = type === "add" && numericAmount > availableBalance;
+
+  const maxAmount =
+    type === "withdraw"
+      ? pot.total
+      : type === "add"
+      ? Math.min(pot.target - pot.total, availableBalance)
+      : undefined;
+
+  const newTotal =
+    type === "add" ? pot.total + numericAmount : pot.total - numericAmount;
+
+  // --- Handlers ---
+  const handleConfirm = () => {
+    if (!amount || withdrawInvalid || addExceedsTarget || addExceedsBalance)
+      return;
+    if (type !== "add" && type !== "withdraw") return;
+    actionMutation.mutate({
+      id: pot.id,
+      amount: numericAmount,
+      type: type as "add" | "withdraw",
+    });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = Number(e.target.value);
+    if (val < 0) val = 0;
+    if (maxAmount !== undefined && val > maxAmount) val = maxAmount;
+    setAmount(val.toString());
+  };
 
   return (
     <Modal
@@ -51,35 +75,16 @@ export default function PotActionModal() {
 
       <div className='flex justify-between items-center pb-4'>
         <p className='text-grey-500 body-m'>New Amount</p>
-        <p className='text-grey-900 heading-xl'>
-          $
-          {type === "add"
-            ? Number(pot.total.toFixed(2)) + Number(amount)
-            : Number(pot.total.toFixed(2)) - Number(amount)}
-        </p>
+        <p className='text-grey-900 heading-xl'>${newTotal.toFixed(2)}</p>
       </div>
 
+      {/* Progress Bar */}
       <div className='w-full bg-gray-100 rounded-full h-2.5'>
         <div className='relative w-full h-2.5 rounded-full overflow-hidden'>
           <div
-            className='absolute left-0 top-0 h-full bg-black rounded-full'
+            className='absolute left-0 top-0 h-full bg-black rounded-left-full'
             style={{ width: `${formattedPercentage}%` }}
           />
-          {type === "add" && addPercentage > 0 && (
-            <div
-              className='absolute top-0 h-full w-[2px] bg-white shadow-sm z-10'
-              style={{ left: `${formattedPercentage}%` }}
-            />
-          )}
-          {type === "withdraw" &&
-            addPercentage > 0 &&
-            +formattedWithdrawStart !== 0 &&
-            +formattedWithdrawStart <= 1 && (
-              <div
-                className='absolute top-0 h-full w-[2px] bg-white shadow-sm z-10'
-                style={{ left: `${formattedWithdrawStart}%` }}
-              />
-            )}
           {type === "add" && (
             <div
               className='absolute top-0 h-full bg-green-600 rounded-r-full transition-all duration-100'
@@ -91,7 +96,7 @@ export default function PotActionModal() {
           )}
           {type === "withdraw" && (
             <div
-              className='absolute top-0 h-full bg-red-500 rounded-full transition-all duration-100'
+              className='absolute top-0 h-full bg-red-500 rounded-left-full transition-all duration-100'
               style={{
                 left: `${formattedWithdrawStart}%`,
                 width: `${formattedAddPercentage}%`,
@@ -100,17 +105,16 @@ export default function PotActionModal() {
           )}
         </div>
       </div>
+
+      {/* Progress Info */}
       <div className='flex justify-between pt-4'>
         <p className={type === "add" ? "text-green-900" : "text-red-900"}>
-          {type === "add"
-            ? (percentage + addPercentage).toFixed(2)
-            : (percentage - addPercentage).toFixed(2)}
-          %
+          {newTotal > 0 ? ((newTotal / pot.target) * 100).toFixed(2) : 0}%
         </p>
-
         <p className='text-grey-500'>Target: ${pot.target.toFixed(2)}</p>
       </div>
 
+      {/* Input */}
       <div className='w-full mt-4'>
         <label className='body-m-bold text-grey-500 mb-1 block'>
           Amount to {type === "add" ? "Add" : "Withdraw"}
@@ -120,14 +124,16 @@ export default function PotActionModal() {
           <input
             type='number'
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            min={0}
+            max={maxAmount}
+            onChange={handleChange}
             className='w-full border border-gray-300 rounded-lg p-2 pl-6 text-grey-900 body-m'
-            placeholder='Enter amount'
-            min='0'
+            placeholder={`Enter amount (max $${maxAmount})`}
           />
         </div>
       </div>
 
+      {/* Error Messages */}
       {withdrawInvalid && (
         <p className='text-red-600 mt-2'>
           Cannot withdraw more than current total!
@@ -144,6 +150,7 @@ export default function PotActionModal() {
         </p>
       )}
 
+      {/* Confirm Button */}
       <button
         onClick={handleConfirm}
         disabled={

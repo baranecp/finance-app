@@ -3,6 +3,7 @@
 import { useModalStore } from "@/store/modalStore";
 import PotActionModal from "@/app/pots/PotActionModal";
 import PotForm from "@/app/pots/PotForm";
+import DeletePotModal from "@/app/pots/DeletePotModal";
 
 export default function ModalManager() {
   const { isOpen, type } = useModalStore();
@@ -11,10 +12,13 @@ export default function ModalManager() {
 
   switch (type) {
     case "edit":
+    case "create":
       return <PotForm />;
     case "add":
     case "withdraw":
       return <PotActionModal />;
+    case "delete":
+      return <DeletePotModal />;
     default:
       return null;
   }

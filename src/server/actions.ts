@@ -87,6 +87,10 @@ export async function createPot(name: string, theme: string, target: number) {
   });
 }
 
+export async function deletePot(potId: string) {
+  await db.delete(pots).where(eq(pots.id, potId));
+}
+
 export async function fetchTransactions({
   query,
   sortBy = "latest",

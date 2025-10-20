@@ -1,6 +1,11 @@
 "use client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updatePotTotal, createPot, updatePot } from "@/server/actions";
+import {
+  updatePotTotal,
+  createPot,
+  updatePot,
+  deletePot,
+} from "@/server/actions";
 import { useModalStore } from "@/store/modalStore";
 import { usePotsStore } from "@/store/potsStore";
 import { usePots } from "@/hooks/usePots";
@@ -58,11 +63,21 @@ export function usePotModal() {
     },
   });
 
+  //Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => deletePot(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pots"] });
+      close();
+    },
+  });
+
   return {
     type,
     isEditing,
     selectedPot,
     updateMutation,
+    deleteMutation,
     selectedPotId,
     close,
     actionMutation,
