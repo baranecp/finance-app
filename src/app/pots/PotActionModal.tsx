@@ -133,23 +133,6 @@ export default function PotActionModal() {
         </div>
       </div>
 
-      {/* Error Messages */}
-      {withdrawInvalid && (
-        <p className='text-red-600 mt-2'>
-          Cannot withdraw more than current total!
-        </p>
-      )}
-      {addExceedsTarget && (
-        <p className='text-red-600 mt-2'>
-          Cannot add more than pot target (${pot.target})
-        </p>
-      )}
-      {addExceedsBalance && (
-        <p className='text-red-600 mt-2'>
-          Cannot add more than your balance (${availableBalance})
-        </p>
-      )}
-
       {/* Confirm Button */}
       <button
         onClick={handleConfirm}
