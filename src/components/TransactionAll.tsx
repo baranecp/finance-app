@@ -38,7 +38,7 @@ export default function TransactionAllList({
             <div className='body-m-bold flex justify-end'>
               <span
                 className={`${
-                  type === "expense" ? "text-black" : "text-green-900"
+                  type === "expense" ? "text-grey-900" : "text-[#277C78]"
                 }`}>
                 {type === "expense" ? "-" : "+"}${amount}
               </span>

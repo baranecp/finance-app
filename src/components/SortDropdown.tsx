@@ -25,7 +25,7 @@ export default function SortDropdown() {
 
   return (
     <>
-      <span className='body-m text-grey-500'>Sort By</span>
+      <label className='body-m text-grey-500'>Sort By</label>
       <select
         className='rounded-md border border-beige-500 py-3 px-4 text-sm'
         value={currentSort}

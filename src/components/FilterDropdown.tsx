@@ -23,7 +23,7 @@ export default function FilterDropdown() {
 
   return (
     <>
-      <span className='body-m text-grey-500'>Category</span>
+      <label className='body-m text-grey-500'>Category</label>
       <select
         className='rounded-md border border-beige-500 py-3 px-4 text-sm'
         value={currentCategory}

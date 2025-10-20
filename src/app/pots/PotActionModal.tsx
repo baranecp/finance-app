@@ -96,7 +96,7 @@ export default function PotActionModal() {
           )}
           {type === "withdraw" && (
             <div
-              className='absolute top-0 h-full bg-red-500 rounded-left-full transition-all duration-100'
+              className='absolute top-0 h-full bg-red-500 rounded-l-full transition-all duration-100'
               style={{
                 left: `${formattedWithdrawStart}%`,
                 width: `${formattedAddPercentage}%`,
