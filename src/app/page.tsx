@@ -7,6 +7,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import Budgets from "@/components/Budgets";
 
 export default function Page() {
   const queryClient = new QueryClient();
@@ -15,8 +16,24 @@ export default function Page() {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <ClientWrapper>
           <Overview />
-          <Pots />
-          <TransactionsOverview />
+          <div
+            className=' mt-6
+             lg:grid
+              lg:grid-cols-2
+              gap-6
+              w-full
+            '>
+            {/* LEFT SIDE */}
+            <div className='lg:flex lg:flex-col lg:gap-6'>
+              <Pots />
+              <TransactionsOverview />
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className='lg:flex lg:flex-col lg:gap-6'>
+              <Budgets />
+            </div>
+          </div>
         </ClientWrapper>
       </HydrationBoundary>
     </div>

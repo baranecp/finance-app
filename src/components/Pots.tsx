@@ -26,6 +26,7 @@ export default function Pots() {
 
   return (
     <section className='flex flex-col gap-5 w-full lg:max-w-[700px] bg-white mt-8 px-5 py-6 rounded-[12px]'>
+      {/* Header */}
       <div className='flex justify-between'>
         <h2 className='heading-l'>Pots</h2>
         <button
@@ -34,18 +35,25 @@ export default function Pots() {
           See Details <GoTriangleRight />
         </button>
       </div>
-      <div className='md:flex gap-5'>
-        <OverviewCard
-          icon={PotsIcon}
-          iconColor='green'
-          text='Total Saved'
-          sum={`$${totalSaved}`}
-          color='gray'
-          sumColor='gray'
-          background='beige'
-          className='max-w-[300px] max-h-[200px] items-center'
-        />
-        <div className='grid grid-cols-2 grid-rows-2 gap-4 md:gap-x-20 mt-5 md:mt-0'>
+
+      {/* Responsive container for OverviewCard + Pots */}
+      <div className='flex flex-wrap gap-5 mt-5 md:mt-0'>
+        {/* OverviewCard */}
+        <div className='flex-shrink-0 md:flex-1 min-w-[200px] max-w-[300px]'>
+          <OverviewCard
+            icon={PotsIcon}
+            iconColor='green'
+            text='Total Saved'
+            sum={`$${totalSaved}`}
+            color='gray'
+            sumColor='gray'
+            background='beige'
+            className='items-center w-full h-full'
+          />
+        </div>
+
+        {/* Pots grid */}
+        <div className='flex-1 min-w-[200px] grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-x-10'>
           {data.data?.map((pot) => (
             <Pot
               key={pot.id}
