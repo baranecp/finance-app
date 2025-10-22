@@ -10,16 +10,15 @@ import { fetchLatestTransactions } from "@/server/actions";
 export default function TransactionsOverview() {
   const router = useRouter();
   const { data, isLoading, error } = useQuery<Transactions[]>({
-    queryKey: ["transactions"],
+    queryKey: ["latest-transactions"],
     queryFn: fetchLatestTransactions,
   });
 
   if (isLoading) return <p>Loading transactions...</p>;
   if (error) return <p>Something went wrong.</p>;
   if (!data || data.length === 0) return <p>No transactions found.</p>;
-
   return (
-    <section className='flex flex-col gap-5 w-full lg:max-w-[700px] bg-white mt-8 px-5 py-6 rounded-[12px]'>
+    <section className='flex flex-col gap-5 w-full bg-white mt-8 px-5 py-6 rounded-[12px]'>
       <div className='flex justify-between'>
         <h2 className='heading-l'>Transactions</h2>
         <button

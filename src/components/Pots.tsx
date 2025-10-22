@@ -25,7 +25,7 @@ export default function Pots() {
   if (!data) return <p>No transactions found.</p>;
 
   return (
-    <section className='flex flex-col gap-5 w-full lg:max-w-[700px] bg-white mt-8 px-5 py-6 rounded-[12px]'>
+    <section className='flex flex-col gap-5 w-full bg-white mt-8 px-5 py-6 rounded-[12px]'>
       {/* Header */}
       <div className='flex justify-between'>
         <h2 className='heading-l'>Pots</h2>
@@ -37,7 +37,7 @@ export default function Pots() {
       </div>
 
       {/* Responsive container for OverviewCard + Pots */}
-      <div className='flex flex-wrap gap-5 mt-5 md:mt-0'>
+      <div className='flex flex-wrap gap-5 mt-5 md:mt-0 items-center'>
         {/* OverviewCard */}
         <div className='flex-shrink-0 md:flex-1 min-w-[200px] max-w-[300px]'>
           <OverviewCard
@@ -53,7 +53,7 @@ export default function Pots() {
         </div>
 
         {/* Pots grid */}
-        <div className='flex-1 min-w-[200px] grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-x-10'>
+        <div className='flex flex-wrap gap-5'>
           {data.data?.map((pot) => (
             <Pot
               key={pot.id}
