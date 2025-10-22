@@ -1,6 +1,11 @@
 "use server";
 import { db } from "@/db/drizzle";
 import { budgets, pots, transactions } from "@/db/schema";
+import {
+  BudgetWithTransactions,
+  RawTransactionRow,
+  Transaction,
+} from "@/types/finance";
 import { desc } from "drizzle-orm";
 import { eq, sql } from "drizzle-orm";
 
@@ -201,6 +206,51 @@ export async function fetchLatestTransactions() {
 }
 
 /* BUDGETS */
+
+export async function getBudgetsWithTransactions(
+  limitPerCategory = 3
+): Promise<BudgetWithTransactions[]> {
+  // 1️⃣ Fetch all budgets
+  const allBudgets = await db.select().from(budgets);
+
+  // 2️⃣ Fetch latest N transactions per category using window function
+  const latestTxResult = await db.execute(
+    sql`
+      SELECT *
+      FROM (
+        SELECT *,
+               ROW_NUMBER() OVER (PARTITION BY category ORDER BY date DESC) as rn
+        FROM ${transactions}
+      ) sub
+      WHERE rn <= ${limitPerCategory};
+    `
+  );
+
+  const transactionsRows = latestTxResult.rows as RawTransactionRow[];
+
+  const combined: BudgetWithTransactions[] = allBudgets.map((budget) => ({
+    id: budget.id,
+    category: budget.category,
+    maximum: Number(budget.maximum),
+    theme: budget.theme,
+    transactions: transactionsRows
+      .filter((t) => t.category === budget.category)
+      .map(
+        (t): Transaction => ({
+          id: String(t.id),
+          name: String(t.name),
+          avatar: t.avatar || "/default-avatar.png",
+          category: String(t.category),
+          type: t.type === "income" ? "income" : "expense",
+          amount: Number(t.amount),
+          date: new Date(t.date).toISOString(),
+          recurring: Boolean(t.recurring),
+        })
+      ),
+  }));
+
+  return combined;
+}
 
 export async function getBudgets({
   queryKey,
