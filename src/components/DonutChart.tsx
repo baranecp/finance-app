@@ -1,24 +1,14 @@
 "use client";
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useBudgetData } from "@/hooks/useBudgetData";
 import { Doughnut } from "react-chartjs-2";
-import { useQuery } from "@tanstack/react-query";
-import { getTransactions, getBudgets } from "@/server/actions";
 
 // Register necessary Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function DonutChart() {
-  const { data: budgets } = useQuery({
-    queryKey: ["budgets"],
-    queryFn: getBudgets,
-  });
-
-  const { data: transactions } = useQuery({
-    queryKey: ["transactions"],
-    queryFn: getTransactions,
-  });
-
+  const { budgets, total, limit } = useBudgetData();
   const chartData = budgets
     ? {
         labels: budgets.data?.map((b) => b.category),
@@ -43,21 +33,6 @@ export default function DonutChart() {
     maintainAspectRatio: false, // allow custom sizing
   };
 
-  const limit = budgets?.data?.reduce((acc, b) => acc + Number(b.maximum), 0);
-  const spendingByCategory = transactions?.data?.reduce((acc, t) => {
-    if (t.type === "expense") {
-      const category = t.category;
-      acc[category] = (acc[category] || 0) + Number(t.amount);
-    }
-    return acc;
-  }, {} as Record<string, number>);
-  const budgetSpendings = budgets?.data?.map((b) => ({
-    ...b,
-    spent: spendingByCategory?.[b.category] ?? 0,
-  }));
-
-  const total = budgetSpendings?.reduce((acc, b) => acc + b.spent, 0);
-
   return (
     <div className='relative w-64 h-64'>
       {/* The Doughnut chart itself */}
@@ -65,8 +40,8 @@ export default function DonutChart() {
 
       {/* Centered static text */}
       <div className='absolute inset-0 flex flex-col items-center justify-center pointer-events-none'>
-        <span className='text-xl font-semibold'>${total}</span>
-        <span className='text-sm text-gray-500'>of ${limit} limit</span>
+        <span className='heading-xl'>${total}</span>
+        <span className='body-s text-gray-500'>of ${limit} limit</span>
       </div>
     </div>
   );
