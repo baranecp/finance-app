@@ -6,6 +6,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import BudgetSummary from "./BudgetsSummary";
+import BudgetList from "./BudgetList";
 
 export default async function Page() {
   const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ export default async function Page() {
             <h1 className='heading-xl'>Budgets</h1>
           </div>
           <BudgetSummary />
+          <BudgetList />
         </ClientWrapper>
       </div>
     </HydrationBoundary>
