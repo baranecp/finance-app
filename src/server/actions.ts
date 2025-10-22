@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/db/drizzle";
-import { pots, transactions } from "@/db/schema";
+import { budgets, pots, transactions } from "@/db/schema";
 import { desc } from "drizzle-orm";
 import { eq, sql } from "drizzle-orm";
 
@@ -91,6 +91,29 @@ export async function deletePot(potId: string) {
   await db.delete(pots).where(eq(pots.id, potId));
 }
 
+/* TRANSACTIONS */
+
+export async function getTransactions({
+  queryKey,
+}: {
+  queryKey: (string | number | undefined)[];
+}) {
+  const limit = queryKey[1] as number | undefined;
+
+  try {
+    const baseQuery = db
+      .select()
+      .from(transactions)
+      .orderBy(desc(transactions.name));
+    const queryWithLimit = limit ? baseQuery.limit(limit) : baseQuery;
+
+    const data = await queryWithLimit;
+    return { data };
+  } catch (error) {
+    return { error };
+  }
+}
+
 export async function fetchTransactions({
   query,
   sortBy = "latest",
@@ -156,6 +179,7 @@ export async function fetchCategories() {
   const unique = Array.from(new Set(all.map((t) => t.category)));
   return unique;
 }
+
 export async function fetchLatestTransactions() {
   const latest = await db
     .select()
@@ -174,4 +198,24 @@ export async function fetchLatestTransactions() {
   }));
 
   return formatted;
+}
+
+/* BUDGETS */
+
+export async function getBudgets({
+  queryKey,
+}: {
+  queryKey: (string | number | undefined)[];
+}) {
+  const limit = queryKey[1] as number | undefined;
+
+  try {
+    const baseQuery = db.select().from(budgets).orderBy(desc(budgets.category));
+    const queryWithLimit = limit ? baseQuery.limit(limit) : baseQuery;
+
+    const data = await queryWithLimit;
+    return { data };
+  } catch (error) {
+    return { error };
+  }
 }
