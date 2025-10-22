@@ -25,9 +25,9 @@ export function useBudgetData() {
   const budgetSpendings = budgets?.data?.map((b) => ({
     ...b,
     spent: spendingByCategory?.[b.category] ?? 0,
+    remaining: +b.maximum - (spendingByCategory?.[b.category] ?? 0),
   }));
 
-  console.log(budgetSpendings);
   const total = budgetSpendings?.reduce((acc, b) => acc + b.spent, 0);
 
   return {

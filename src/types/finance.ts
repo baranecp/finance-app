@@ -41,3 +41,33 @@ export type Overview = {
   text: string;
   sum: string;
 };
+
+export type RawTransactionRow = {
+  id: string;
+  name: string;
+  avatar?: string | null;
+  category: string;
+  type: string; // will cast to "income" | "expense"
+  amount: string | number; // might be string from DB
+  date: string | Date;
+  recurring?: boolean | null;
+};
+
+export type Transaction = {
+  id: string;
+  name: string;
+  avatar: string;
+  category: string;
+  type: "income" | "expense";
+  amount: number;
+  date: string;
+  recurring: boolean;
+};
+
+export type BudgetWithTransactions = {
+  id: string;
+  category: string;
+  maximum: number;
+  theme: string;
+  transactions: Transaction[];
+};
