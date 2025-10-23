@@ -2,19 +2,19 @@
 import { usePotsStore } from "@/store/potsStore";
 import { usePotModal } from "@/hooks/usePotModal";
 import Modal from "@/components/Modal";
-import { useModalStore } from "@/store/modalStore";
+import { useModalStore, isPot } from "@/store/modalStore";
 import { FaDollarSign } from "react-icons/fa6";
 import ThemeSelect from "@/components/ThemeSelect";
 import { useEffect } from "react";
 
 export default function PotForm() {
   const { formData, setFormData, resetForm } = usePotsStore();
-  const { createMutation, updateMutation, isEditing, selectedPot } =
-    usePotModal();
-  const { type, isOpen, close } = useModalStore();
+  const { createMutation, updateMutation, isEditing } = usePotModal();
+  const { type, isOpen, close, data } = useModalStore();
+  const selectedPot = isPot(data) ? data : null;
 
   useEffect(() => {
-    if (isEditing && selectedPot) {
+    if (isEditing && selectedPot && isPot(selectedPot)) {
       setFormData({
         name: selectedPot.name,
         target: selectedPot.target,

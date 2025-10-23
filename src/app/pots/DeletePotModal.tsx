@@ -1,14 +1,14 @@
 "use client";
 
 import Modal from "@/components/Modal";
-import { useModalStore } from "@/store/modalStore";
+import { useModalStore, isPot } from "@/store/modalStore";
 import { usePotModal } from "@/hooks/usePotModal";
 
 export default function DeletePotModal() {
-  const { isOpen, type, selectedPot, close } = useModalStore();
+  const { isOpen, type, data: selectedPot, close } = useModalStore();
   const { deleteMutation } = usePotModal();
 
-  if (!isOpen || type !== "delete" || !selectedPot) return null;
+  if (!isOpen || type !== "delete" || !isPot(selectedPot)) return null;
 
   const handleDelete = () => {
     deleteMutation.mutate(selectedPot);

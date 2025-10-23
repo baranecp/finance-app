@@ -17,20 +17,37 @@ export type Pot = {
   percentage?: number;
 };
 
+export type Budget = {
+  id: string;
+  category: string;
+  maximum: number;
+  theme: string;
+};
+
+export type ModalData = Pot | Budget | null;
+
+export function isPot(data: ModalData): data is Pot {
+  return data !== null && "total" in data && "target" in data && "name" in data;
+}
+
+export function isBudget(data: ModalData): data is Budget {
+  return data !== null && "maximum" in data && "category" in data;
+}
+
 type ModalState = {
   type: ModalType;
-  selectedPot?: Pot | null;
+  data: ModalData;
   isOpen: boolean;
-  open: (type: ModalType, pot?: Pot | null) => void;
+  open: (type: ModalType, data?: ModalData) => void;
   close: () => void;
-  setSelectedPot: (pot: Pot | null) => void;
+  setData: (data: ModalData) => void;
 };
 
 export const useModalStore = create<ModalState>((set) => ({
   type: null,
-  selectedPot: null,
+  data: null,
   isOpen: false,
-  open: (type, pot) => set({ type, selectedPot: pot ?? null, isOpen: true }),
-  close: () => set({ type: null, selectedPot: null, isOpen: false }),
-  setSelectedPot: (pot) => set({ selectedPot: pot }),
+  open: (type, data) => set({ type, data: data ?? null, isOpen: true }),
+  close: () => set({ type: null, data: null, isOpen: false }),
+  setData: (data) => set({ data }),
 }));
