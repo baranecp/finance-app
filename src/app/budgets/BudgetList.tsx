@@ -1,55 +1,91 @@
 "use client";
-
 import { getBudgetsWithTransactions } from "@/server/actions";
 import { BudgetWithTransactions } from "@/types/finance";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import BudgetDropdownButton from "./BudgetDropdownButton";
+import { GoTriangleRight } from "react-icons/go";
+import { useRouter } from "next/navigation";
+import Transaction from "@/components/Transaction";
+import ProgressBarBudget from "@/components/ProgressBarBudget";
+import { useBudgetData } from "@/hooks/useBudgetData";
 
 export default function BudgetList() {
+  const router = useRouter();
   const {
     data: budgetsWithTx,
     isLoading,
     error,
   } = useQuery<BudgetWithTransactions[]>({
     queryKey: ["budgetsWithTransactions"],
-    queryFn: () => getBudgetsWithTransactions(3),
+    queryFn: () => getBudgetsWithTransactions(),
   });
+
+  const { spendingByCategory } = useBudgetData();
+
+  const budgetSpendings = budgetsWithTx?.map((b) => ({
+    ...b,
+    spent: spendingByCategory?.[b.category] ?? 0,
+    remaining: +b.maximum - (spendingByCategory?.[b.category] ?? 0),
+  }));
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading budgets.</p>;
 
   return (
-    <div className='flex flex-col gap-6'>
-      {budgetsWithTx?.map((budget) => (
-        <div key={budget.id} className='p-4 border rounded-lg'>
-          <h3 className='font-semibold'>{budget.category}</h3>
-          <p>Limit: ${budget.maximum}</p>
-
-          <div className='mt-2'>
-            <h4 className='font-medium'>Latest Transactions:</h4>
-            {budget.transactions.length ? (
-              budget.transactions.map((t) => (
-                <div key={t.id} className='flex justify-between'>
-                  <span>{t.name}</span>
-                  <Image
-                    src={t.avatar}
-                    alt={t.name}
-                    width={40}
-                    height={40}
-                    className='rounded-full object-cover'
-                  />
-                  <span
-                    className={
-                      t.type === "income" ? "text-green-500" : "text-red-500"
-                    }>
-                    {t.type === "income" ? "+" : "-"}${t.amount}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <p className='text-gray-400'>No transactions yet</p>
-            )}
+    <div className='flex flex-col gap-6 mt-8'>
+      {budgetSpendings?.map((budget) => (
+        <div key={budget.id} className='bg-white rounded-[12px] py-6 px-5'>
+          <div className='flex justify-between items-center'>
+            <h1
+              className={`relative heading-l inline-flex items-center gap-4 before:content-[''] before:bg-[color:var(--theme)] before:w-5 before:h-5 before:rounded-full`}
+              style={{ "--theme": budget.theme } as React.CSSProperties}>
+              {budget.category}
+            </h1>
+            <BudgetDropdownButton />
           </div>
+          <div>
+            <p className='body-m text-grey-500'>Maximum of ${budget.maximum}</p>
+            <ProgressBarBudget
+              percentage={(budget.spent / budget.maximum) * 100}
+              theme={budget.theme}
+            />
+          </div>
+
+          <section className='flex flex-col gap-5 w-full bg-beige-100 mt-8 px-5 py-6 rounded-[12px]'>
+            <div className='flex justify-between'>
+              <h2 className='heading-l'>Latest Spendings</h2>
+              <button
+                className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'
+                onClick={() =>
+                  router.push(`/transactions?category=${budget.category}`)
+                }>
+                View All <GoTriangleRight />
+              </button>
+            </div>
+
+            {budget.transactions.map((t) => {
+              const formattedDate = new Date(t.date).toLocaleDateString(
+                "en-GB",
+                {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                }
+              );
+
+              return (
+                <Transaction
+                  key={t.id}
+                  id={t.id}
+                  avatar={t.avatar}
+                  name={t.name}
+                  type={t.type}
+                  amount={`${t.amount}`}
+                  date={formattedDate}
+                />
+              );
+            })}
+          </section>
         </div>
       ))}
     </div>

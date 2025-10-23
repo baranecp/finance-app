@@ -22,8 +22,10 @@ export default async function Page() {
           <div className='flex justify-between mb-8'>
             <h1 className='heading-xl'>Budgets</h1>
           </div>
-          <BudgetSummary />
-          <BudgetList />
+          <div className='grid grid-cols-2 gap-x-10'>
+            <BudgetSummary />
+            <BudgetList />
+          </div>
         </ClientWrapper>
       </div>
     </HydrationBoundary>
