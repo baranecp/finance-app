@@ -14,7 +14,7 @@ export type PotActionType = "add" | "withdraw";
 
 export function usePotModal() {
   const queryClient = useQueryClient();
-  const { type, selectedPot, close } = useModalStore();
+  const { type, close } = useModalStore();
   const { formData, resetForm } = usePotsStore();
 
   const isEditing = type === "edit";
@@ -72,7 +72,6 @@ export function usePotModal() {
   return {
     type,
     isEditing,
-    selectedPot,
     actionMutation,
     createMutation,
     updateMutation,

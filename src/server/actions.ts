@@ -210,10 +210,7 @@ export async function fetchLatestTransactions() {
 export async function getBudgetsWithTransactions(
   limitPerCategory = 3
 ): Promise<BudgetWithTransactions[]> {
-  // 1️⃣ Fetch all budgets
   const allBudgets = await db.select().from(budgets);
-
-  // 2️⃣ Fetch latest N transactions per category using window function
   const latestTxResult = await db.execute(
     sql`
       SELECT *
