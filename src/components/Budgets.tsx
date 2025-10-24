@@ -5,18 +5,27 @@ import { useRouter } from "next/navigation";
 import Budget from "./Budget";
 import DonutChart from "./DonutChart";
 import { useQuery } from "@tanstack/react-query";
-import { getBudgets } from "@/server/actions";
+import { getBudgetsWithTransactions } from "@/server/actions";
+import { BudgetWithTransactions } from "@/types/finance";
 
 export default function Budgets() {
   const router = useRouter();
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["budgets", 4],
-    queryFn: getBudgets,
+  const {
+    data: budgetsWithTx,
+    isLoading,
+    error,
+  } = useQuery<BudgetWithTransactions[]>({
+    queryKey: ["budgetsWithTransactions"],
+    queryFn: () => getBudgetsWithTransactions(3),
   });
 
   if (isLoading) return <p>Loading pots.</p>;
   if (error) return <p>Something went wrong.</p>;
-  if (!data) return <p>No transactions found.</p>;
+  if (!budgetsWithTx) return <p>No transactions found.</p>;
+
+  const latestBudgets = budgetsWithTx
+    ?.sort((a, b) => a.category.localeCompare(b.category))
+    .slice(0, 4);
 
   return (
     <section className='w-full bg-white mt-8 px-5 py-6 rounded-[12px]'>
@@ -39,7 +48,7 @@ export default function Budgets() {
 
         {/* Budgets container with container query */}
         <div className='flex flex-wrap gap-5'>
-          {data.data?.map((data) => (
+          {latestBudgets.map((data) => (
             <Budget
               key={data.id}
               id={data.id}

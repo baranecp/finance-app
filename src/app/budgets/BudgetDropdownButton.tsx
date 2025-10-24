@@ -1,25 +1,32 @@
 "use client";
 import { useState } from "react";
-// import { useModalStore } from "@/store/modalStore";
+import { useModalStore } from "@/store/modalStore";
 import { SlOptions } from "react-icons/sl";
+import { BudgetWithTransactions } from "@/types/finance";
 
-export default function BudgetDropdownButton() {
-  //   const { open } = useModalStore();
+export default function PotDropdownButton({
+  budget,
+}: {
+  budget: BudgetWithTransactions;
+}) {
+  const { open } = useModalStore();
   const [isOpen, setIsOpen] = useState(false);
 
-  //   const handleOpen = (type: "edit" | "delete") => {
-  //     open(type, {
-  //       id: budget.id,
-  //       category: budget.category,
-  //       maximum: budget.maximum ?? 0,
-  //       theme: budget.theme ?? "defaultTheme",
-  //     });
-  //     setIsOpen(false);
-  //   };
+  const handleOpen = (type: "editBudget" | "deleteBudget") => {
+    console.log("Opening modal type:", type, "with pot:", budget);
+    open(type, {
+      ...budget,
+      category: budget.category ?? "",
+      maximum: Number(budget.maximum),
+      theme: budget.theme ?? "#000000",
+    });
+    setIsOpen(false);
+  };
 
   return (
     <div className='relative inline-block text-left'>
       <button
+        onClick={() => setIsOpen((prev) => !prev)}
         className='inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none  focus:ring-gray-50 cursor-pointer'
         type='button'>
         <SlOptions className='text-grey-300' />
@@ -30,12 +37,16 @@ export default function BudgetDropdownButton() {
             className='py-4 px-4 text-sm flex flex-col gap-2'
             aria-labelledby='dropdownMenuIconHorizontalButton'>
             <li>
-              <button className='w-full text-left px-4 py-2 text-grey-900 cursor-pointer scale-100 active:scale-95 transition-transform duration-200 transform-gpu'>
+              <button
+                onClick={() => handleOpen("editBudget")}
+                className='w-full text-left px-4 py-2 text-grey-900 cursor-pointer scale-100 active:scale-95 transition-transform duration-200 transform-gpu'>
                 Edit Budget
               </button>
             </li>
             <li>
-              <button className='w-full text-left px-4 py-2  text-[#C94736] cursor-pointer scale-100 active:scale-95 transition-transform duration-200 transform-gpu'>
+              <button
+                onClick={() => handleOpen("deleteBudget")}
+                className='w-full text-left px-4 py-2  text-[#C94736] cursor-pointer scale-100 active:scale-95 transition-transform duration-200 transform-gpu'>
                 Delete Budget
               </button>
             </li>

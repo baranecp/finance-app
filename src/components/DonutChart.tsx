@@ -8,15 +8,15 @@ import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function DonutChart() {
-  const { budgets, total, limit } = useBudgetData();
-  const chartData = budgets
+  const { budgetsWithTx, total, limit } = useBudgetData();
+  const chartData = budgetsWithTx
     ? {
-        labels: budgets.data?.map((b) => b.category),
+        labels: budgetsWithTx?.map((b) => b.category),
         datasets: [
           {
-            data: budgets.data?.map((b) => b.maximum),
-            backgroundColor: budgets.data?.map((b) => b.theme),
-            borderColor: budgets.data?.map((b) => b.theme),
+            data: budgetsWithTx?.map((b) => b.maximum),
+            backgroundColor: budgetsWithTx?.map((b) => b.theme),
+            borderColor: budgetsWithTx?.map((b) => b.theme),
             borderWidth: 0,
             borderRadius: 0, // rounds slice ends (Chart.js v3+)
           },

@@ -5,33 +5,11 @@ import { useBudgetMutations } from "@/hooks/useBudgetMutation";
 import { useModalStore } from "@/store/modalStore";
 import { useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
-import { useQuery } from "@tanstack/react-query";
-import { getBudgets } from "@/server/actions";
 import CategorySelect from "@/components/CategorySelect";
 
 export default function BudgetForm() {
   const { type, isOpen, close } = useModalStore();
   const { createMutation } = useBudgetMutations();
-
-  const categories = [
-    { value: "General", label: "General" },
-    { value: "Dining Out", label: "Dining Out" },
-    { value: "Groceries", label: "Groceries" },
-    { value: "Entertainment", label: "Entertainment" },
-    { value: "Transportation", label: "Transportation" },
-    { value: "Lifestyle", label: "Lifestyle" },
-    { value: "Personal Care", label: "Personal Care" },
-    { value: "Education", label: "Education" },
-    { value: "Bills", label: "Bills" },
-    { value: "Shopping", label: "Shopping" },
-  ];
-
-  const { data: budgets } = useQuery({
-    queryKey: ["budgets"],
-    queryFn: getBudgets,
-  });
-
-  const category = budgets?.data?.map((b) => b.category);
 
   const isCreating = type === "createBudget";
 
@@ -62,7 +40,9 @@ export default function BudgetForm() {
         <div className='w-full flex flex-col gap-9 mb-5 text-beige-500 body-m'>
           {/* Budget category */}
           <div>
-            <label className='body-m text-grey-500'>Category</label>
+            <label className='body-m-bold text-grey-500 mb-1 block'>
+              Category
+            </label>
             <CategorySelect
               value={formData.category}
               onChange={(value) =>
@@ -71,7 +51,7 @@ export default function BudgetForm() {
             />
           </div>
 
-          {/* Target */}
+          {/* Maximum */}
           <div>
             <label className='body-m-bold text-grey-500 mb-1 block'>
               Target

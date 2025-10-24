@@ -44,7 +44,7 @@ export default function BudgetList() {
               style={{ "--theme": budget.theme } as React.CSSProperties}>
               {budget.category}
             </h1>
-            <BudgetDropdownButton />
+            <BudgetDropdownButton budget={budget} />
           </div>
           <div>
             <p className='body-m text-grey-500 mb-4'>

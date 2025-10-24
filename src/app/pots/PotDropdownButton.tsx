@@ -17,7 +17,6 @@ export default function PotDropdownButton({ pot }: { pot: Pot }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = (type: "editPot" | "deletePot") => {
-    console.log("Opening modal type:", type, "with pot:", pot);
     open(type, {
       ...pot,
       total: Number(pot.total),
