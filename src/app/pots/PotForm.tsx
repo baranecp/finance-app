@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useModalStore } from "@/store/modalStore";
+import { isPot, useModalStore } from "@/store/modalStore";
 import { usePotModal } from "@/hooks/usePotModal";
 import Modal from "@/components/Modal";
 import { FaDollarSign } from "react-icons/fa6";
@@ -22,7 +22,7 @@ export default function PotForm() {
 
   // --- prefill when editing ---
   useEffect(() => {
-    if (isEditing && pot) {
+    if (isEditing && isPot(pot)) {
       setFormData({
         name: pot.name,
         target: pot.target,
@@ -35,7 +35,7 @@ export default function PotForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEditing && pot) {
+    if (isEditing && isPot(pot)) {
       updateMutation.mutate({ pot, data: formData });
     } else {
       createMutation.mutate(formData);

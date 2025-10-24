@@ -1,3 +1,4 @@
+import { Budget } from "@/types/finance";
 import { create } from "zustand";
 
 export type ModalType =
@@ -6,6 +7,9 @@ export type ModalType =
   | "create"
   | "editPot"
   | "deletePot"
+  | "createBudget"
+  | "editBudget"
+  | "deleteBudget"
   | null;
 
 export type Pot = {
@@ -16,7 +20,7 @@ export type Pot = {
   theme: string;
 };
 
-type ModalData = Pot | null;
+type ModalData = Pot | Budget | null;
 
 type ModalState = {
   type: ModalType;
@@ -25,6 +29,14 @@ type ModalState = {
   open: (type: ModalType, data?: ModalData) => void;
   close: () => void;
 };
+
+export function isPot(data: Pot | Budget | null): data is Pot {
+  return !!data && "name" in data && "total" in data;
+}
+
+export function isBudget(data: Pot | Budget | null): data is Budget {
+  return !!data && "amount" in data;
+}
 
 export const useModalStore = create<ModalState>((set) => ({
   type: null,
