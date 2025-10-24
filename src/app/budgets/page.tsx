@@ -8,6 +8,7 @@ import {
 import BudgetSummary from "./BudgetsSummary";
 import BudgetList from "./BudgetList";
 import AddBudgetButton from "./AddBudgetButton";
+import BudgetForm from "./BudgetForm";
 
 export default async function Page() {
   const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ export default async function Page() {
           <div className='lg:grid grid-cols-2 gap-x-10'>
             <BudgetSummary />
             <BudgetList />
+            <BudgetForm />
           </div>
         </ClientWrapper>
       </div>

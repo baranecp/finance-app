@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Transaction from "@/components/Transaction";
 import ProgressBarBudget from "@/components/ProgressBarBudget";
 import { useBudgetData } from "@/hooks/useBudgetData";
+import ModalManager from "@/util/ModalManager";
 
 export default function BudgetList() {
   const router = useRouter();
@@ -111,6 +112,7 @@ export default function BudgetList() {
           </section>
         </div>
       ))}
+      <ModalManager />
     </div>
   );
 }
