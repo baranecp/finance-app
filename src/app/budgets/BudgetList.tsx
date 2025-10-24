@@ -26,7 +26,9 @@ export default function BudgetList() {
   const budgetSpendings = budgetsWithTx?.map((b) => ({
     ...b,
     spent: spendingByCategory?.[b.category] ?? 0,
-    remaining: +b.maximum - (spendingByCategory?.[b.category] ?? 0),
+    remaining: (+b.maximum - (spendingByCategory?.[b.category] ?? 0)).toFixed(
+      2
+    ),
   }));
 
   if (isLoading) return <p>Loading...</p>;

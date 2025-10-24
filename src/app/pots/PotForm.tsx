@@ -6,11 +6,12 @@ import { usePotModal } from "@/hooks/usePotModal";
 import Modal from "@/components/Modal";
 import { FaDollarSign } from "react-icons/fa6";
 import ThemeSelect from "@/components/ThemeSelect";
+import { usePots } from "@/hooks/usePots";
 
 export default function PotForm() {
   const { type, isOpen, data: pot, close } = useModalStore();
   const { createMutation, updateMutation } = usePotModal();
-
+  const { pots } = usePots();
   const isEditing = type === "editPot";
   const isCreating = type === "create";
 
@@ -41,6 +42,7 @@ export default function PotForm() {
       createMutation.mutate(formData);
     }
   };
+  const usedPotThemes = pots.map((pot) => pot.theme);
 
   if (!isOpen || (!isEditing && !isCreating)) return null;
 
@@ -104,6 +106,7 @@ export default function PotForm() {
               onChange={(value) =>
                 setFormData((prev) => ({ ...prev, theme: value }))
               }
+              disabled={usedPotThemes}
             />
           </div>
         </div>

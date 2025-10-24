@@ -6,11 +6,12 @@ import { useModalStore } from "@/store/modalStore";
 import { useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
 import CategorySelect from "@/components/CategorySelect";
+import { useBudgetData } from "@/hooks/useBudgetData";
 
 export default function BudgetForm() {
   const { type, isOpen, close } = useModalStore();
   const { createMutation } = useBudgetMutations();
-
+  const { budgetsWithTx } = useBudgetData();
   const isCreating = type === "createBudget";
 
   const [formData, setFormData] = useState({
@@ -23,6 +24,8 @@ export default function BudgetForm() {
     e.preventDefault();
     createMutation.mutate(formData);
   };
+
+  const usedBudgetThemes = budgetsWithTx?.map((b) => b.theme) ?? [];
 
   if (!isOpen || !isCreating) return null;
 
@@ -83,6 +86,7 @@ export default function BudgetForm() {
               onChange={(value) =>
                 setFormData((prev) => ({ ...prev, theme: value }))
               }
+              disabled={usedBudgetThemes}
             />
           </div>
         </div>
