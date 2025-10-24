@@ -1,27 +1,23 @@
 "use client";
 
 import Modal from "@/components/Modal";
-import { useModalStore, isPot } from "@/store/modalStore";
+import { useModalStore } from "@/store/modalStore";
 import { usePotModal } from "@/hooks/usePotModal";
 
 export default function DeletePotModal() {
-  const { isOpen, type, data: selectedPot, close } = useModalStore();
+  const { isOpen, type, data: pot, close } = useModalStore();
   const { deleteMutation } = usePotModal();
 
-  if (!isOpen || type !== "delete" || !isPot(selectedPot)) return null;
+  if (!isOpen || type !== "deletePot" || !pot) return null;
 
   const handleDelete = () => {
-    deleteMutation.mutate(selectedPot);
+    deleteMutation.mutate(pot);
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={close}
-      title={`Delete '${selectedPot.name}'?`}>
+    <Modal isOpen={isOpen} onClose={close} title={`Delete '${pot.name}'?`}>
       <p className='text-grey-500 body-m mb-4'>
-        Are you sure you want to delete this pot? This action cannot be
-        reversed, and all the data inside it will be removed forever.
+        Are you sure you want to delete this pot? This action cannot be undone.
       </p>
       <div className='flex flex-col gap-4'>
         <button

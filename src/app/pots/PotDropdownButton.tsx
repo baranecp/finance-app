@@ -8,7 +8,7 @@ type Pot = {
   name: string;
   total: number;
   target: number;
-  theme?: string;
+  theme: string;
   percentage?: number;
 };
 
@@ -16,13 +16,13 @@ export default function PotDropdownButton({ pot }: { pot: Pot }) {
   const { open } = useModalStore();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = (type: "edit" | "delete") => {
+  const handleOpen = (type: "editPot" | "deletePot") => {
+    console.log("Opening modal type:", type, "with pot:", pot);
     open(type, {
-      id: pot.id,
-      name: pot.name,
-      target: pot.target ?? 0,
-      total: pot.total ?? 0,
-      theme: pot.theme ?? "defaultTheme",
+      ...pot,
+      total: Number(pot.total),
+      target: Number(pot.target),
+      theme: pot.theme ?? "#000000",
     });
     setIsOpen(false);
   };
@@ -42,14 +42,14 @@ export default function PotDropdownButton({ pot }: { pot: Pot }) {
             aria-labelledby='dropdownMenuIconHorizontalButton'>
             <li>
               <button
-                onClick={() => handleOpen("edit")}
+                onClick={() => handleOpen("editPot")}
                 className='w-full text-left px-4 py-2 text-grey-900 cursor-pointer scale-100 active:scale-95 transition-transform duration-200 transform-gpu'>
                 Edit Pot
               </button>
             </li>
             <li>
               <button
-                onClick={() => handleOpen("delete")}
+                onClick={() => handleOpen("deletePot")}
                 className='w-full text-left px-4 py-2  text-[#C94736] cursor-pointer scale-100 active:scale-95 transition-transform duration-200 transform-gpu'>
                 Delete Pot
               </button>

@@ -1,40 +1,48 @@
 "use client";
-import { usePotsStore } from "@/store/potsStore";
+
+import { useState, useEffect } from "react";
+import { useModalStore } from "@/store/modalStore";
 import { usePotModal } from "@/hooks/usePotModal";
 import Modal from "@/components/Modal";
-import { useModalStore, isPot } from "@/store/modalStore";
 import { FaDollarSign } from "react-icons/fa6";
 import ThemeSelect from "@/components/ThemeSelect";
-import { useEffect } from "react";
 
 export default function PotForm() {
-  const { formData, setFormData, resetForm } = usePotsStore();
-  const { createMutation, updateMutation, isEditing } = usePotModal();
-  const { type, isOpen, close, data } = useModalStore();
-  const selectedPot = isPot(data) ? data : null;
+  const { type, isOpen, data: pot, close } = useModalStore();
+  const { createMutation, updateMutation } = usePotModal();
 
+  const isEditing = type === "editPot";
+  const isCreating = type === "create";
+
+  const [formData, setFormData] = useState({
+    name: "",
+    target: 0,
+    theme: "#000000",
+  });
+
+  // --- prefill when editing ---
   useEffect(() => {
-    if (isEditing && selectedPot && isPot(selectedPot)) {
+    if (isEditing && pot) {
       setFormData({
-        name: selectedPot.name,
-        target: selectedPot.target,
-        theme: selectedPot.theme,
+        name: pot.name,
+        target: pot.target,
+        theme: pot.theme,
       });
-    } else {
-      resetForm();
+    } else if (isCreating) {
+      setFormData({ name: "", target: 0, theme: "#000000" });
     }
-  }, [isEditing, selectedPot, setFormData, resetForm]);
+  }, [isEditing, isCreating, pot]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEditing && selectedPot) {
-      updateMutation.mutate({ pot: selectedPot!, data: formData });
+    if (isEditing && pot) {
+      updateMutation.mutate({ pot, data: formData });
     } else {
       createMutation.mutate(formData);
     }
   };
 
-  if (!isOpen || (type !== "edit" && type !== "create")) return null;
+  if (!isOpen || (!isEditing && !isCreating)) return null;
 
   return (
     <Modal
@@ -45,8 +53,10 @@ export default function PotForm() {
         Create a pot to set savings targets. These can help keep you on track as
         you save for special purchases.
       </p>
+
       <form onSubmit={handleSubmit}>
         <div className='w-full flex flex-col gap-9 mb-5 text-beige-500 body-m'>
+          {/* Pot name */}
           <div>
             <label className='body-m-bold text-grey-500 mb-1 block'>
               Pot Name
@@ -62,6 +72,7 @@ export default function PotForm() {
             />
           </div>
 
+          {/* Target */}
           <div>
             <label className='body-m-bold text-grey-500 mb-1 block'>
               Target
@@ -73,13 +84,17 @@ export default function PotForm() {
                 placeholder='Target amount'
                 value={formData.target || ""}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, target: +e.target.value }))
+                  setFormData((prev) => ({
+                    ...prev,
+                    target: +e.target.value,
+                  }))
                 }
                 className='w-full border p-2 pl-6 rounded text-grey-900'
               />
             </div>
           </div>
 
+          {/* Theme */}
           <div>
             <label className='body-m-bold text-grey-500 mb-1 block'>
               Theme

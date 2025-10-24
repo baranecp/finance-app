@@ -7,7 +7,7 @@ type PotProps = {
     name: string;
     total: number;
     target: number;
-    theme?: string;
+    theme: string;
     percentage?: number;
   };
   onAddMoney: () => void;
