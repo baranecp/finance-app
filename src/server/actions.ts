@@ -2,6 +2,7 @@
 import { db } from "@/db/drizzle";
 import { budgets, pots, transactions } from "@/db/schema";
 import {
+  Budget,
   BudgetWithTransactions,
   RawTransactionRow,
   Transaction,
@@ -266,15 +267,30 @@ export async function getBudgets({
     return { error };
   }
 }
-
 export async function createBudget(
   category: string,
   theme: string,
   maximum: number
-) {
-  await db.insert(budgets).values({
-    category,
-    theme,
-    maximum: maximum.toString(),
-  });
+): Promise<BudgetWithTransactions> {
+  const [newBudget] = await db
+    .insert(budgets)
+    .values({
+      category,
+      theme,
+      maximum: maximum.toString(),
+    })
+    .returning();
+
+  return {
+    id: newBudget.id,
+    category: newBudget.category,
+    maximum: Number(newBudget.maximum),
+    theme: newBudget.theme,
+    transactions: [],
+  };
+}
+
+export async function deleteBudget(budgetId: string) {
+  await db.delete(budgets).where(eq(budgets.id, budgetId));
+  console.log(budgets.id);
 }

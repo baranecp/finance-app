@@ -1,10 +1,11 @@
-import { getBudgets, getTransactions } from "@/server/actions";
+import { getBudgetsWithTransactions, getTransactions } from "@/server/actions";
+import { BudgetWithTransactions } from "@/types/finance";
 import { useQuery } from "@tanstack/react-query";
 
 export function useBudgetData() {
-  const { data: budgets } = useQuery({
-    queryKey: ["budgets"],
-    queryFn: getBudgets,
+  const { data: budgetsWithTx } = useQuery<BudgetWithTransactions[]>({
+    queryKey: ["budgetsWithTransactions"],
+    queryFn: () => getBudgetsWithTransactions(),
   });
 
   const { data: transactions } = useQuery({
@@ -12,7 +13,8 @@ export function useBudgetData() {
     queryFn: getTransactions,
   });
 
-  const limit = budgets?.data?.reduce((acc, b) => acc + Number(b.maximum), 0);
+  const limit =
+    budgetsWithTx?.reduce((acc, b) => acc + Number(b.maximum), 0) ?? 0;
 
   const spendingByCategory = transactions?.data?.reduce((acc, t) => {
     if (t.type === "expense") {
@@ -22,7 +24,7 @@ export function useBudgetData() {
     return acc;
   }, {} as Record<string, number>);
 
-  const budgetSpendings = budgets?.data?.map((b) => ({
+  const budgetSpendings = budgetsWithTx?.map((b) => ({
     ...b,
     spent: spendingByCategory?.[b.category] ?? 0,
     remaining: +b.maximum - (spendingByCategory?.[b.category] ?? 0),
@@ -31,7 +33,7 @@ export function useBudgetData() {
   const total = budgetSpendings?.reduce((acc, b) => acc + b.spent, 0);
 
   return {
-    budgets,
+    budgetsWithTx,
     transactions,
     limit,
     spendingByCategory,
