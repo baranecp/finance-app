@@ -266,3 +266,15 @@ export async function getBudgets({
     return { error };
   }
 }
+
+export async function createBudget(
+  category: string,
+  theme: string,
+  maximum: number
+) {
+  await db.insert(budgets).values({
+    category,
+    theme,
+    maximum: maximum.toString(),
+  });
+}
