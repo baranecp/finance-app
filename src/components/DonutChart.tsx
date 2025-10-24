@@ -9,7 +9,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function DonutChart() {
   const { budgetsWithTx, total, limit } = useBudgetData();
-  const chartData = budgetsWithTx
+  const hasBudgets = budgetsWithTx && budgetsWithTx.length > 0;
+
+  const chartData = hasBudgets
     ? {
         labels: budgetsWithTx?.map((b) => b.category),
         datasets: [
@@ -18,19 +20,29 @@ export default function DonutChart() {
             backgroundColor: budgetsWithTx?.map((b) => b.theme),
             borderColor: budgetsWithTx?.map((b) => b.theme),
             borderWidth: 0,
-            borderRadius: 0, // rounds slice ends (Chart.js v3+)
+            borderRadius: 0,
           },
         ],
       }
-    : { labels: [], datasets: [] };
+    : {
+        labels: ["No Budgets"],
+        datasets: [
+          {
+            data: [1],
+            backgroundColor: ["#E5E7EB"],
+            borderColor: ["#D1D5DB"],
+            borderWidth: 2,
+          },
+        ],
+      };
 
   const chartOptions = {
-    cutout: "70%", // inner radius 70% of full radius
+    cutout: "70%",
     plugins: {
       legend: { display: false },
       tooltip: { enabled: false },
     },
-    maintainAspectRatio: false, // allow custom sizing
+    maintainAspectRatio: false,
   };
 
   return (

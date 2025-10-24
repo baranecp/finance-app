@@ -2,11 +2,11 @@
 
 import Select, { SingleValue } from "react-select";
 import { useState } from "react";
-import { usePots } from "@/hooks/usePots";
 
 interface ThemeSelectProps {
   value: string | null;
   onChange: (value: string) => void;
+  disabled: string[];
 }
 
 interface ThemeOption {
@@ -14,11 +14,11 @@ interface ThemeOption {
   label: string;
 }
 
-export default function ThemeSelect({ value, onChange }: ThemeSelectProps) {
-  const { pots } = usePots();
-
-  const usedThemes = pots.map((pot) => pot.theme);
-
+export default function ThemeSelect({
+  value,
+  onChange,
+  disabled,
+}: ThemeSelectProps) {
   const themes = [
     { name: "Green", value: "#277C78" },
     { name: "Yellow", value: "#F2CDAC" },
@@ -48,12 +48,12 @@ export default function ThemeSelect({ value, onChange }: ThemeSelectProps) {
       value={selected}
       onChange={handleChange}
       options={options}
-      isOptionDisabled={(option) => usedThemes.includes(option.value)}
+      isOptionDisabled={(option) => disabled.includes(option.value)}
       placeholder='Select theme'
       isSearchable={false}
       className='text-grey-900'
       formatOptionLabel={(option) => {
-        const isUsed = usedThemes.includes(option.value);
+        const isUsed = disabled.includes(option.value);
         return (
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-2'>
