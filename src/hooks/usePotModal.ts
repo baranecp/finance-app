@@ -8,16 +8,14 @@ import {
   deletePot,
 } from "@/server/actions";
 import { useModalStore, Pot } from "@/store/modalStore";
-import { usePotsStore } from "@/store/potsStore";
 
 export type PotActionType = "add" | "withdraw";
 
 export function usePotModal() {
   const queryClient = useQueryClient();
   const { type, close } = useModalStore();
-  const { formData, resetForm } = usePotsStore();
 
-  const isEditing = type === "edit";
+  const isEditing = type === "editPot";
 
   // --- Action mutation (add/withdraw money) ---
   const actionMutation = useMutation({
@@ -38,24 +36,29 @@ export function usePotModal() {
 
   // --- Create mutation ---
   const createMutation = useMutation({
-    mutationFn: async (data: typeof formData) => {
+    mutationFn: async (data: {
+      name: string;
+      target: number;
+      theme: string;
+    }) => {
       await createPot(data.name, data.theme, data.target);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pots"] });
-      resetForm();
       close();
     },
   });
 
   // --- Update mutation ---
   const updateMutation = useMutation({
-    mutationFn: async (payload: { pot: Pot; data: typeof formData }) => {
+    mutationFn: async (payload: {
+      pot: Pot;
+      data: { name: string; target: number; theme: string };
+    }) => {
       await updatePot(payload.pot.id, payload.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pots"] });
-      resetForm();
       close();
     },
   });

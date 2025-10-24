@@ -70,9 +70,9 @@ export async function updatePot(
     await db
       .update(pots)
       .set({
-        ...(data.name && { name: data.name }),
-        ...(data.target && { target: data.target.toString() }),
-        ...(data.theme && { theme: data.theme }),
+        ...(data.name !== undefined && { name: data.name }),
+        ...(data.target !== undefined && { target: data.target.toString() }),
+        ...(data.theme !== undefined && { theme: data.theme }),
       })
       .where(eq(pots.id, id));
 
