@@ -16,16 +16,23 @@ export function useBudgetMutations() {
       theme: string;
       maximum: number;
     }) => {
-      return await createBudget(data.category, data.theme, data.maximum);
+      const created = await createBudget(
+        data.category,
+        data.theme,
+        data.maximum
+      );
+      return { ...created, transactions: [] }; // temporary empty transactions
     },
     onSuccess: (newBudget) => {
+      // Show budget immediately at top
       queryClient.setQueryData<BudgetWithTransactions[]>(
         ["budgetsWithTransactions"],
-        (old) => {
-          const oldData = old || [];
-          return [...oldData, newBudget];
-        }
+        (old) => [newBudget, ...(old || [])]
       );
+
+      // Refetch full budgetsWithTransactions to populate latest spendings
+      queryClient.invalidateQueries({ queryKey: ["budgetsWithTransactions"] });
+
       close();
     },
   });

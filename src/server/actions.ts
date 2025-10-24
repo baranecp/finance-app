@@ -25,7 +25,7 @@ export async function getPots({
   const limit = queryKey[1] as number | undefined;
 
   try {
-    const baseQuery = db.select().from(pots).orderBy(desc(pots.name));
+    const baseQuery = db.select().from(pots).orderBy(desc(pots.createdAt));
     const queryWithLimit = limit ? baseQuery.limit(limit) : baseQuery;
 
     const data = await queryWithLimit;
@@ -210,7 +210,10 @@ export async function fetchLatestTransactions() {
 export async function getBudgetsWithTransactions(
   limitPerCategory = 3
 ): Promise<BudgetWithTransactions[]> {
-  const allBudgets = await db.select().from(budgets);
+  const allBudgets = await db
+    .select()
+    .from(budgets)
+    .orderBy(desc(budgets.createdAt));
   const latestTxResult = await db.execute(
     sql`
       SELECT *
@@ -257,7 +260,10 @@ export async function getBudgets({
   const limit = queryKey[1] as number | undefined;
 
   try {
-    const baseQuery = db.select().from(budgets).orderBy(desc(budgets.category));
+    const baseQuery = db
+      .select()
+      .from(budgets)
+      .orderBy(desc(budgets.createdAt));
     const queryWithLimit = limit ? baseQuery.limit(limit) : baseQuery;
 
     const data = await queryWithLimit;

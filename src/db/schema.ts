@@ -1,7 +1,19 @@
-import { pgTable, uuid, text, varchar, numeric, timestamp, pgEnum, boolean} from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  text,
+  varchar,
+  numeric,
+  timestamp,
+  pgEnum,
+  boolean,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-export const transactionType = pgEnum("transaction_type", ["income", "expense"]);
+export const transactionType = pgEnum("transaction_type", [
+  "income",
+  "expense",
+]);
 
 export const transactions = pgTable("transactions", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -19,8 +31,8 @@ export const budgets = pgTable("budgets", {
   category: varchar("category", { length: 100 }).notNull().unique(),
   maximum: numeric("maximum").notNull(),
   theme: varchar("theme", { length: 50 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
-
 
 export const pots = pgTable("pots", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -28,6 +40,7 @@ export const pots = pgTable("pots", {
   target: numeric("target").notNull(),
   total: numeric("total").notNull(),
   theme: varchar("theme", { length: 50 }).notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const budgetsRelations = relations(budgets, ({ many }) => ({
