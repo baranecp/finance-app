@@ -2,7 +2,6 @@
 import { db } from "@/db/drizzle";
 import { budgets, pots, transactions } from "@/db/schema";
 import {
-  Budget,
   BudgetWithTransactions,
   RawTransactionRow,
   Transaction,
