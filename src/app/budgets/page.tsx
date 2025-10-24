@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import BudgetSummary from "./BudgetsSummary";
 import BudgetList from "./BudgetList";
+import AddBudgetButton from "./AddBudgetButton";
 
 export default async function Page() {
   const queryClient = new QueryClient();
@@ -21,8 +22,9 @@ export default async function Page() {
         <ClientWrapper>
           <div className='flex justify-between mb-8'>
             <h1 className='heading-xl'>Budgets</h1>
+            <AddBudgetButton />
           </div>
-          <div className='grid grid-cols-2 gap-x-10'>
+          <div className='lg:grid grid-cols-2 gap-x-10'>
             <BudgetSummary />
             <BudgetList />
           </div>

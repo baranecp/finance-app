@@ -34,7 +34,9 @@ export default function BudgetList() {
   return (
     <div className='flex flex-col gap-6 mt-8'>
       {budgetSpendings?.map((budget) => (
-        <div key={budget.id} className='bg-white rounded-[12px] py-6 px-5'>
+        <div
+          key={budget.id}
+          className='bg-white rounded-[12px] py-6 px-5 flex flex-col gap-5'>
           <div className='flex justify-between items-center'>
             <h1
               className={`relative heading-l inline-flex items-center gap-4 before:content-[''] before:bg-[color:var(--theme)] before:w-5 before:h-5 before:rounded-full`}
@@ -44,11 +46,32 @@ export default function BudgetList() {
             <BudgetDropdownButton />
           </div>
           <div>
-            <p className='body-m text-grey-500'>Maximum of ${budget.maximum}</p>
+            <p className='body-m text-grey-500 mb-4'>
+              Maximum of ${budget.maximum.toFixed(2)}
+            </p>
             <ProgressBarBudget
               percentage={(budget.spent / budget.maximum) * 100}
               theme={budget.theme}
             />
+            <div className='flex flex-wrap relative overflow-hidden items-center max-w-[65%] justify-between pb-4 mt-4  after:content-[""] after:absolute after:left-0 after:right-0 after:bottom-0  after:h-px after:bg-grey-100 last:after:hidden last:pb-0 last:mb-0'>
+              <div className='flex items-center gap-4'>
+                <div
+                  style={{ backgroundColor: budget.theme }}
+                  className={`w-[4px] h-[45px] rounded-full shrink-0`}></div>
+                <div className='flex flex-col gap-2'>
+                  <span className='body-m text-grey-500'>Spent</span>
+                  <span>${budget.spent}</span>
+                </div>
+              </div>
+              <div className='flex items-center gap-4'>
+                <div
+                  className={`w-[4px] h-[45px] rounded-full shrink-0 bg-beige-100`}></div>
+                <div className='flex flex-col gap-2'>
+                  <span className='body-m text-grey-500'>Remaining</span>
+                  <span>${budget.remaining}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <section className='flex flex-col gap-5 w-full bg-beige-100 mt-8 px-5 py-6 rounded-[12px]'>

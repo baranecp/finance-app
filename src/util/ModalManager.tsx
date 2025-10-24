@@ -11,13 +11,13 @@ export default function ModalManager() {
   if (!isOpen) return null;
 
   switch (type) {
-    case "edit":
+    case "editPot":
     case "create":
       return <PotForm />;
     case "add":
     case "withdraw":
       return <PotActionModal />;
-    case "delete":
+    case "deletePot":
       return <DeletePotModal />;
     default:
       return null;
