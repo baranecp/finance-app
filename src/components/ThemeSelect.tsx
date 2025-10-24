@@ -25,6 +25,11 @@ export default function ThemeSelect({ value, onChange }: ThemeSelectProps) {
     { name: "Blue", value: "#626FDB" },
     { name: "Red", value: "#F29999" },
     { name: "Purple", value: "#A27CF2" },
+    { name: "Orange", value: "#F5A623" },
+    { name: "Teal", value: "#1ABC9C" },
+    { name: "Pink", value: "#FF6B81" },
+    { name: "Cyan", value: "#00BFFF" },
+    { name: "Brown", value: "#A0522D" },
   ];
 
   const options = themes.map((t) => ({ value: t.value, label: t.name }));
