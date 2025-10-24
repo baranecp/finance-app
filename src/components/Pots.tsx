@@ -11,7 +11,7 @@ import { getPots } from "@/server/actions";
 export default function Pots() {
   const router = useRouter();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["pots", 4],
+    queryKey: ["pots"],
     queryFn: getPots,
   });
 
@@ -19,6 +19,10 @@ export default function Pots() {
     (acc, pot) => acc + Number(pot.total),
     0
   );
+
+  const latestPots = data?.data
+    ?.sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, 4);
 
   if (isLoading) return <p>Loading pots.</p>;
   if (error) return <p>Something went wrong.</p>;
@@ -54,7 +58,7 @@ export default function Pots() {
 
         {/* Pots grid */}
         <div className='flex flex-wrap gap-5'>
-          {data.data?.map((pot) => (
+          {latestPots?.map((pot) => (
             <Pot
               key={pot.id}
               id={pot.id}
