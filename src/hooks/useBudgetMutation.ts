@@ -1,8 +1,8 @@
 "use client";
 
-import { createBudget, deleteBudget } from "@/server/actions";
+import { createBudget, deleteBudget, updateBudget } from "@/server/actions";
 import { useModalStore } from "@/store/modalStore";
-import { BudgetWithTransactions } from "@/types/finance";
+import { Budget, BudgetWithTransactions } from "@/types/finance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useBudgetMutations() {
@@ -37,6 +37,20 @@ export function useBudgetMutations() {
     },
   });
 
+  //-- Update mutation ---
+  const updateMutation = useMutation({
+    mutationFn: async (data: {
+      budget: Budget;
+      data: { category: string; maximum: number; theme: string };
+    }) => {
+      await updateBudget(data.budget.id, data.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgetsWithTransactions"] });
+      close();
+    },
+  });
+
   // --- Delete mutation ---
   const deleteMutation = useMutation({
     mutationFn: async (budget: BudgetWithTransactions) => {
@@ -57,6 +71,7 @@ export function useBudgetMutations() {
 
   return {
     createMutation,
+    updateMutation,
     deleteMutation,
     close,
   };

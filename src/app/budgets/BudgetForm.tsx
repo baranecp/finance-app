@@ -2,17 +2,18 @@
 import Modal from "@/components/Modal";
 import ThemeSelect from "@/components/ThemeSelect";
 import { useBudgetMutations } from "@/hooks/useBudgetMutation";
-import { useModalStore } from "@/store/modalStore";
-import { useState } from "react";
+import { useModalStore, isBudget } from "@/store/modalStore";
+import { useEffect, useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
 import CategorySelect from "@/components/CategorySelect";
 import { useBudgetData } from "@/hooks/useBudgetData";
 
 export default function BudgetForm() {
-  const { type, isOpen, close } = useModalStore();
-  const { createMutation } = useBudgetMutations();
+  const { type, isOpen, close, data: budget } = useModalStore();
+  const { createMutation, updateMutation } = useBudgetMutations();
   const { budgetsWithTx } = useBudgetData();
   const isCreating = type === "createBudget";
+  const isEditing = type === "editBudget";
 
   const [formData, setFormData] = useState({
     category: "",
@@ -20,18 +21,34 @@ export default function BudgetForm() {
     theme: "#000000",
   });
 
+  // --- prefill when editing ---
+  useEffect(() => {
+    if (isEditing && isBudget(budget)) {
+      setFormData({
+        category: budget.category,
+        maximum: budget.maximum,
+        theme: budget.theme,
+      });
+    } else if (isCreating) {
+      setFormData({ category: "", maximum: 0, theme: "#000000" });
+    }
+  }, [isEditing, isCreating, budget]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isEditing && isBudget(budget)) {
+      updateMutation.mutate({ budget, data: formData });
+    }
     createMutation.mutate(formData);
   };
 
   const usedBudgetThemes = budgetsWithTx?.map((b) => b.theme) ?? [];
 
-  if (!isOpen || !isCreating) return null;
+  if (!isOpen || (!isCreating && !isEditing)) return null;
 
   return (
     <Modal
-      title={isCreating ? "Add New Budget" : ""}
+      title={isEditing ? "Edit Budget" : "Add New Budget"}
       isOpen={isOpen}
       onClose={close}>
       <p className='text-grey-500 body-m max-w-[480px] mb-5'>
@@ -93,9 +110,15 @@ export default function BudgetForm() {
 
         <button
           type='submit'
-          disabled={createMutation.isPending}
+          disabled={createMutation.isPending || updateMutation.isPending}
           className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900 cursor-pointer'>
-          {createMutation.isPending ? "Adding..." : "Add Budget"}
+          {isEditing
+            ? updateMutation.isPending
+              ? "Editting..."
+              : "Edit Budget"
+            : createMutation.isPending
+            ? "Adding..."
+            : "Add Budget"}
         </button>
       </form>
     </Modal>

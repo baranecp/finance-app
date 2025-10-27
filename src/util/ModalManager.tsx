@@ -16,6 +16,7 @@ export default function ModalManager() {
     case "editPot":
     case "create":
       return <PotForm />;
+    case "editBudget":
     case "createBudget":
       return <BudgetForm />;
     case "add":

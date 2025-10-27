@@ -74,7 +74,8 @@ export async function updatePot(
         ...(data.target !== undefined && { target: data.target.toString() }),
         ...(data.theme !== undefined && { theme: data.theme }),
       })
-      .where(eq(pots.id, id));
+      .where(eq(pots.id, id))
+      .returning();
 
     return { success: true };
   } catch (error) {
@@ -272,6 +273,7 @@ export async function getBudgets({
     return { error };
   }
 }
+
 export async function createBudget(
   category: string,
   theme: string,
@@ -293,6 +295,34 @@ export async function createBudget(
     theme: newBudget.theme,
     transactions: [],
   };
+}
+
+export async function updateBudget(
+  id: string,
+  data: {
+    category?: string;
+    theme?: string;
+    maximum?: number;
+  }
+) {
+  try {
+    await db
+      .update(budgets)
+      .set({
+        ...(data.category !== undefined && { category: data.category }),
+        ...(data.maximum !== undefined && { maximum: data.maximum.toString() }),
+        ...(data.theme !== undefined && { theme: data.theme }),
+      })
+      .where(eq(budgets.id, id))
+      .returning();
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Failed to update budget:", error);
+    return { success: false, error: "Failed to update budget" };
+  }
 }
 
 export async function deleteBudget(budgetId: string) {
