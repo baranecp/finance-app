@@ -71,7 +71,14 @@ export default function BudgetList() {
                   className={`w-[4px] h-[45px] rounded-full shrink-0 bg-beige-100`}></div>
                 <div className='flex flex-col gap-2'>
                   <span className='body-m text-grey-500'>Remaining</span>
-                  <span>${budget.remaining}</span>
+                  <span
+                    className={
+                      budget.maximum < +budget.spent ? "text-red-500" : ""
+                    }>
+                    {budget.maximum < +budget.spent
+                      ? `${budget.remaining}$`
+                      : `$${budget.remaining}`}
+                  </span>
                 </div>
               </div>
             </div>

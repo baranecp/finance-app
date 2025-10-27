@@ -20,6 +20,7 @@ export default function PotForm() {
     target: 0,
     theme: "#000000",
   });
+  const [error, setError] = useState<string | null>(null);
 
   // --- prefill when editing ---
   useEffect(() => {
@@ -34,8 +35,20 @@ export default function PotForm() {
     }
   }, [isEditing, isCreating, pot]);
 
+  // --- validate target against current total ---
+  useEffect(() => {
+    if (isEditing && isPot(pot) && formData.target < pot.total) {
+      setError(
+        `Target cannot be lower than current total ($${pot.total.toFixed(2)})`
+      );
+    } else {
+      setError(null);
+    }
+  }, [formData.target, isEditing, pot]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (error) return;
     if (isEditing && isPot(pot)) {
       updateMutation.mutate({ pot, data: formData });
     } else {
@@ -94,6 +107,7 @@ export default function PotForm() {
                 className='w-full border p-2 pl-6 rounded text-grey-900'
               />
             </div>
+            {error && <p className='text-red-600 mt-1 text-sm'>{error}</p>}
           </div>
 
           {/* Theme */}
@@ -113,8 +127,10 @@ export default function PotForm() {
 
         <button
           type='submit'
-          disabled={createMutation.isPending || updateMutation.isPending}
-          className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900 cursor-pointer'>
+          disabled={
+            !!error || createMutation.isPending || updateMutation.isPending
+          }
+          className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900 cursor-pointer disabled:text-grey-500 disabled:cursor-default'>
           {isEditing
             ? updateMutation.isPending
               ? "Editing..."

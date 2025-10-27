@@ -20,7 +20,6 @@ export default function BudgetForm() {
     maximum: 0,
     theme: "#000000",
   });
-
   // --- prefill when editing ---
   useEffect(() => {
     if (isEditing && isBudget(budget)) {
