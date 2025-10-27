@@ -15,8 +15,8 @@ export default function Budgets() {
     isLoading,
     error,
   } = useQuery<BudgetWithTransactions[]>({
-    queryKey: ["budgetsWithTransactions"],
-    queryFn: () => getBudgetsWithTransactions(3),
+    queryKey: ["budgetsWithTransactions", "home"],
+    queryFn: async () => getBudgetsWithTransactions(),
   });
 
   if (isLoading) return <p>Loading pots.</p>;

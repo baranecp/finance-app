@@ -1,20 +1,28 @@
 import Overview from "@/components/Overview";
 import Pots from "@/components/Pots";
 import TransactionsOverview from "@/components/TransactionsOverview";
-import ClientWrapper from "./ClientWrapper";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
 import Budgets from "@/components/Budgets";
+import { getBudgetsWithTransactions, getPots } from "@/server/actions";
 
-export default function Page() {
+export default async function Page() {
   const queryClient = new QueryClient();
+
+  // Prefetch server data
+  await queryClient.prefetchQuery({ queryKey: ["pots"], queryFn: getPots });
+  await queryClient.prefetchQuery({
+    queryKey: ["budgetsWithTransactions"],
+    queryFn: async () => getBudgetsWithTransactions(),
+  });
+
   return (
     <div className='flex h-screen bg-beige-100'>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <ClientWrapper>
+        <main className='md:px-10 md:mt-10 mt-6 px-4 pb-14 flex-1 overflow-y-auto'>
           <Overview />
           <div
             className=' mt-6
@@ -34,7 +42,7 @@ export default function Page() {
               <Budgets />
             </div>
           </div>
-        </ClientWrapper>
+        </main>
       </HydrationBoundary>
     </div>
   );

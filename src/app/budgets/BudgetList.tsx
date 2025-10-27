@@ -18,7 +18,7 @@ export default function BudgetList() {
     error,
   } = useQuery<BudgetWithTransactions[]>({
     queryKey: ["budgetsWithTransactions"],
-    queryFn: () => getBudgetsWithTransactions(),
+    queryFn: async () => getBudgetsWithTransactions(),
   });
 
   const { spendingByCategory } = useBudgetData();

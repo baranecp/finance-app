@@ -1,9 +1,14 @@
 "use client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import { Public_Sans } from "next/font/google";
-
-const PublicSans = Public_Sans({
-  weight: ["400", "700"],
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes
+      refetchOnWindowFocus: false,
+    },
+  },
 });
 
 export default function ClientWrapper({
@@ -12,9 +17,6 @@ export default function ClientWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <main
-      className={`md:px-10 md:mt-10 mt-6 px-4 pb-14 flex-1 overflow-y-auto ${PublicSans.className}`}>
-      {children}
-    </main>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }

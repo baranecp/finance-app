@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 export function useBudgetData() {
   const { data: budgetsWithTx } = useQuery<BudgetWithTransactions[]>({
     queryKey: ["budgetsWithTransactions"],
-    queryFn: () => getBudgetsWithTransactions(),
+    queryFn: async () => getBudgetsWithTransactions(),
   });
 
   const { data: transactions } = useQuery({

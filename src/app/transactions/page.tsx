@@ -9,6 +9,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Public_Sans } from "next/font/google";
+const PublicSans = Public_Sans({
+  weight: ["400", "700"],
+});
 
 type TransactionsPageProps = {
   searchParams: {
@@ -48,23 +52,26 @@ export default async function TransactionsPage({
       {" "}
       <div className='flex h-screen bg-beige-100'>
         <ClientWrapper>
-          <h1 className='heading-xl mb-8'>Transactions</h1>
-          <section className='bg-white p-8 rounded-xl'>
-            <div className='flex flex-wrap gap-4 mb-6 items-center justify-between'>
-              <SearchInput />
-              <div className='flex gap-4 items-center'>
-                <FilterDropdown />
-                <SortDropdown />
+          <main
+            className={`md:px-10 md:mt-10 mt-6 px-4 pb-14 flex-1 overflow-y-auto ${PublicSans.className}`}>
+            <h1 className='heading-xl mb-8'>Transactions</h1>
+            <section className='bg-white p-8 rounded-xl'>
+              <div className='flex flex-wrap gap-4 mb-6 items-center justify-between'>
+                <SearchInput />
+                <div className='flex gap-4 items-center'>
+                  <FilterDropdown />
+                  <SortDropdown />
+                </div>
               </div>
-            </div>
-            <TransactionsList
-              query={query}
-              sortBy={sortBy}
-              category={category}
-              page={currentPage}
-              pageSize={10}
-            />
-          </section>
+              <TransactionsList
+                query={query}
+                sortBy={sortBy}
+                category={category}
+                page={currentPage}
+                pageSize={10}
+              />
+            </section>
+          </main>
         </ClientWrapper>
       </div>
     </HydrationBoundary>
