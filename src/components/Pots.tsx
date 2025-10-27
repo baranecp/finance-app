@@ -11,7 +11,7 @@ import { getPots } from "@/server/actions";
 export default function Pots() {
   const router = useRouter();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["pots"],
+    queryKey: ["pots", "home"],
     queryFn: getPots,
   });
 
