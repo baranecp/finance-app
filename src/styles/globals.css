@@ -41,53 +41,54 @@
 
 @layer utilities {
   .heading-xl {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 2vw + 1rem, 2rem);
     line-height: 1.2;
     letter-spacing: 0rem;
     font-weight: 700;
   }
 
   .heading-l {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 1.5vw + 0.75rem, 1.25rem);
     line-height: 1.2;
     letter-spacing: 0rem;
     font-weight: 700;
   }
 
   .heading-m {
-    font-size: 1rem;
+    font-size: clamp(0.875rem, 1vw + 0.75rem, 1rem);
     line-height: 1.5;
     letter-spacing: 0rem;
     font-weight: 700;
   }
 
   .body-m {
-    font-size: 0.875rem;
+    font-size: clamp(0.75rem, 0.8vw + 0.7rem, 0.875rem);
     line-height: 1.5;
     letter-spacing: 0rem;
     font-weight: 400;
   }
 
   .body-m-bold {
-    font-size: 0.875rem;
+    font-size: clamp(0.75rem, 0.8vw + 0.7rem, 0.875rem);
     line-height: 1.5;
     letter-spacing: 0rem;
     font-weight: 700;
   }
 
   .body-s {
-    font-size: 0.75rem;
+    font-size: clamp(0.625rem, 0.7vw + 0.6rem, 0.75rem);
     line-height: 1.5;
     letter-spacing: 0rem;
     font-weight: 400;
   }
 
   .body-s-bold {
-    font-size: 0.75rem;
+    font-size: clamp(0.625rem, 0.7vw + 0.6rem, 0.75rem);
     line-height: 1.5;
     letter-spacing: 0rem;
     font-weight: 700;
   }
+
   /* Margin helpers */
   .m-50 {
     margin: var(--spacing-50);
