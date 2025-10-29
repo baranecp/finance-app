@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import Budgets from "@/components/Budgets";
 import { getBudgetsWithTransactions, getPots } from "@/server/actions";
+import Bills from "@/components/Bills";
 
 export default async function Page() {
   const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ export default async function Page() {
             {/* RIGHT SIDE */}
             <div className='lg:flex lg:flex-col lg:gap-6'>
               <Budgets />
+              <Bills />
             </div>
           </div>
         </main>
