@@ -13,7 +13,6 @@ export default function PotDropdownButton({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = (type: "editBudget" | "deleteBudget") => {
-    console.log("Opening modal type:", type, "with pot:", budget);
     open(type, {
       ...budget,
       category: budget.category ?? "",
