@@ -12,11 +12,26 @@ import PotsIcon from "../../../public/pots.svg";
 import TransactionsIcon from "../../../public/transactions.svg";
 
 const navItems = [
-  { icon: OverviewIcon, label: "Overview", href: "/" },
-  { icon: TransactionsIcon, label: "Transactions", href: "/transactions" },
-  { icon: BudgetsIcon, label: "Budgets", href: "/budgets" },
-  { icon: PotsIcon, label: "Pots", href: "/pots" },
-  { icon: BillsIcon, label: "Recurring Bills", href: "/bills" },
+  { icon: OverviewIcon, label: "Overview", href: "/", activeSegment: null },
+  {
+    icon: TransactionsIcon,
+    label: "Transactions",
+    href: "/transactions",
+    activeSegment: "transactions",
+  },
+  {
+    icon: BudgetsIcon,
+    label: "Budgets",
+    href: "/budgets",
+    activeSegment: "budgets",
+  },
+  { icon: PotsIcon, label: "Pots", href: "/pots", activeSegment: "pots" },
+  {
+    icon: BillsIcon,
+    label: "Recurring Bills",
+    href: "/bills",
+    activeSegment: "bills",
+  },
 ];
 
 export default function Navbar() {

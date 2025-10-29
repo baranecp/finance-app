@@ -3,20 +3,26 @@ import { useSidebarStore } from "@/store/useSidebarStore";
 import { motion, AnimatePresence } from "framer-motion";
 import NavItems from "./NavItems";
 
-/*Logos*/
+/* Logos */
 import LogoFull from "../../../public/Logo.svg";
 import LogoShort from "../../../public/LogoCollapse.svg";
 
-/*Icons*/
+/* Icons */
 import ArrowLeft from "../../../public/ArrowLeft.svg";
 import ArrowRight from "../../../public/ArrowRight.svg";
 
 interface DesktopNavbarProps {
-  navItems: { icon: React.ElementType; label: string; href: string }[];
+  navItems: {
+    icon: React.ElementType;
+    label: string;
+    href: string;
+    activeSegment: string | null;
+  }[];
 }
 
 export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
   const { isOpen, toggle } = useSidebarStore();
+
   return (
     <motion.aside
       role='navigation'
@@ -24,9 +30,9 @@ export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
       transition={{ type: "spring", stiffness: 200, damping: 25 }}
       className='hidden lg:flex bg-grey-900 h-screen sticky top-0 left-0 overflow-hidden flex-col rounded-r-[16px]'>
       {/* Logo */}
-      <motion.div
+      <div
         className={`mb-[64px] mt-10 px-8 overflow-hidden ${
-          !isOpen && "flex justify-center"
+          !isOpen ? "flex justify-center" : ""
         }`}>
         <AnimatePresence mode='wait'>
           {isOpen ? (
@@ -49,7 +55,7 @@ export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </div>
 
       {/* Nav Items */}
       <ul className='flex flex-col gap-1'>
@@ -57,7 +63,7 @@ export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
       </ul>
 
       {/* Toggle Button */}
-      <motion.button
+      <button
         tabIndex={0}
         onClick={toggle}
         aria-label={isOpen ? "Collapse navbar" : "Expand navbar"}
@@ -83,7 +89,7 @@ export default function DesktopNavbar({ navItems }: DesktopNavbarProps) {
             )}
           </AnimatePresence>
         </div>
-      </motion.button>
+      </button>
     </motion.aside>
   );
 }
