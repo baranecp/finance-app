@@ -64,7 +64,10 @@ export default function PotActionModal() {
       {/* Info */}
       <div className='flex justify-between pt-4'>
         <p className={type === "add" ? "text-green-900" : "text-red-900"}>
-          {newTotal > 0 ? ((newTotal / pot.target) * 100).toFixed(2) : 0}%
+          {newTotal > 0 && newTotal <= 100
+            ? ((newTotal / pot.target) * 100).toFixed(2)
+            : 0}
+          %
         </p>
         <p className='text-grey-500'>Target: ${pot.target.toFixed(2)}</p>
       </div>
