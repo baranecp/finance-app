@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { GoTriangleRight } from "react-icons/go";
 import { categorizeBills, Bill } from "@/util/bills";
 import { useMemo } from "react";
+import BillCard from "./BillCard";
 
 export default function Bills() {
   const router = useRouter();
@@ -31,15 +32,22 @@ export default function Bills() {
           See Details <GoTriangleRight />
         </button>
       </div>
-      <div className='flex flex-col gap-2'>
-        <h3>Due Soon:</h3>
-        <p>{totals.dueTotal.toFixed(2)}</p>
-
-        <h3>Total Upcoming:</h3>
-        <p>{totals.upcomingTotal.toFixed(2)}</p>
-
-        <h3>Paid Bills:</h3>
-        <p>{totals.paidTotal.toFixed(2)}</p>
+      <div className='flex flex-col gap-5 mt-5'>
+        <BillCard
+          name='Paid Bills'
+          total={+totals.paidTotal.toFixed(2)}
+          color='#277C78'
+        />
+        <BillCard
+          name='Total Upcoming'
+          total={+totals.upcomingTotal.toFixed(2)}
+          color='#F2CDAC'
+        />
+        <BillCard
+          name='Due Soon'
+          total={+totals.dueTotal.toFixed(2)}
+          color='#82C9D7'
+        />
       </div>
     </section>
   );
