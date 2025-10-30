@@ -42,6 +42,7 @@ export function categorizeBills(bills: Bill[], maxUpcoming = 15) {
     dueTotal: due.reduce((acc, t) => acc + +t.amount, 0),
     upcomingTotal: upcoming.reduce((acc, t) => acc + +t.amount, 0),
     paidTotal: paid.reduce((acc, t) => acc + +t.amount, 0),
+    totalBills: billsWithDaysLeft.reduce((acc, t) => acc + +t.amount, 0),
   };
 
   return { due, upcoming, paid, totals };
