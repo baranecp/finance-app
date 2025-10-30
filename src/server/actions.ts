@@ -206,6 +206,70 @@ export async function fetchLatestTransactions() {
   return formatted;
 }
 
+interface FetchBillsOptions {
+  query?: string;
+  sortBy?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export async function fetchBills({
+  query,
+  sortBy = "latest",
+  page = 1,
+  pageSize = 10,
+}: FetchBillsOptions) {
+  // Get all transactions
+  let all = await db.select().from(transactions);
+
+  // Filter recurring only
+  all = all.filter((t) => t.recurring);
+
+  // Filter by search query
+  if (query) {
+    all = all.filter((t) => t.name.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  // Sort
+  all.sort((a, b) => {
+    switch (sortBy) {
+      case "latest":
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      case "oldest":
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      case "a-z":
+        return a.name
+          .trim()
+          .toLowerCase()
+          .localeCompare(b.name.trim().toLowerCase());
+      case "z-a":
+        return b.name
+          .trim()
+          .toLowerCase()
+          .localeCompare(a.name.trim().toLowerCase());
+      case "highest":
+        return +b.amount - +a.amount;
+      case "lowest":
+        return +a.amount - +b.amount;
+      default:
+        return 0;
+    }
+  });
+
+  const totalPages = Math.ceil(all.length / pageSize);
+  const start = (page - 1) * pageSize;
+
+  const paginatedBills = all.slice(start, start + pageSize).map((t) => ({
+    id: t.id,
+    name: t.name,
+    avatar: t.avatar || "/default-avatar.png",
+    amount: t.amount,
+    date: t.date,
+  }));
+
+  return { data: paginatedBills, totalPages };
+}
+
 /* BUDGETS */
 
 export async function getBudgetsWithTransactions(

@@ -22,7 +22,7 @@ export default function SearchInput() {
 
   return (
     <>
-      <div className='relative w-1/4'>
+      <div className='relative min-w-1/4'>
         <input
           type='text'
           placeholder='Search transactions'
