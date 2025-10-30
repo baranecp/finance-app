@@ -1,6 +1,6 @@
 export interface BillType {
   name: string;
-  total: number;
+  total: string | number;
   color: string;
 }
 

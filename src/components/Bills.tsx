@@ -28,7 +28,7 @@ export default function Bills() {
         <h2 className='heading-l'>Recurring Bills</h2>
         <button
           className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'
-          onClick={() => router.push("/pots")}>
+          onClick={() => router.push("/bills")}>
           See Details <GoTriangleRight />
         </button>
       </div>
@@ -40,12 +40,12 @@ export default function Bills() {
         />
         <BillCard
           name='Total Upcoming'
-          total={+totals.upcomingTotal.toFixed(2)}
+          total={totals.upcomingTotal.toFixed(2)}
           color='#F2CDAC'
         />
         <BillCard
           name='Due Soon'
-          total={+totals.dueTotal.toFixed(2)}
+          total={totals.dueTotal.toFixed(2)}
           color='#82C9D7'
         />
       </div>

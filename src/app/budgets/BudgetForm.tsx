@@ -18,35 +18,46 @@ export default function BudgetForm() {
   const [formData, setFormData] = useState({
     category: "",
     maximum: 0,
-    theme: "#000000",
+    theme: "",
   });
+  const [isReady, setIsReady] = useState(false);
+
   // --- prefill when editing ---
   useEffect(() => {
+    if (!isOpen) {
+      setIsReady(false);
+      return;
+    }
+
     if (isEditing && isBudget(budget)) {
       setFormData({
-        category: budget.category,
-        maximum: budget.maximum,
-        theme: budget.theme,
+        category: budget.category ?? "",
+        maximum: Number(budget.maximum ?? 0),
+        theme: budget.theme ?? "",
       });
+      setIsReady(true);
     } else if (isCreating) {
-      setFormData({ category: "", maximum: 0, theme: "#000000" });
+      setFormData({ category: "", maximum: 0, theme: "" });
+      setIsReady(true);
     }
-  }, [isEditing, isCreating, budget]);
+  }, [isOpen, isCreating, isEditing, budget]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditing && isBudget(budget)) {
       updateMutation.mutate({ budget, data: formData });
+    } else if (isCreating) {
+      createMutation.mutate(formData);
     }
-    createMutation.mutate(formData);
   };
 
   const usedBudgetThemes = budgetsWithTx?.map((b) => b.theme) ?? [];
 
-  if (!isOpen || (!isCreating && !isEditing)) return null;
+  if (!isOpen || (!isCreating && !isEditing) || !isReady) return null;
 
   return (
     <Modal
+      key={budget?.id || "createBudget"}
       title={isEditing ? "Edit Budget" : "Add New Budget"}
       isOpen={isOpen}
       onClose={close}>
