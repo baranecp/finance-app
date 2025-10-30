@@ -1,12 +1,12 @@
 import { Bill, categorizeBills } from "@/util/bills";
 import TotalBill from "./TotalBill";
-import { useMemo } from "react";
 import { useBills } from "@/hooks/useBills";
+import { useMemo } from "react";
 
 export default function TotalBills() {
   const { data } = useBills();
   const bills = data?.data?.filter((t: Bill) => t.recurring);
-  const { totals, due, upcoming, paid } = useMemo(
+  const { paid, due, upcoming, totals } = useMemo(
     () => categorizeBills(bills || []),
     [bills]
   );

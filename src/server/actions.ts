@@ -104,14 +104,18 @@ export async function getTransactions({
 }: {
   queryKey: (string | number | undefined)[];
 }) {
-  const limit = queryKey[1] as number | undefined;
+  // Only use limit if the second item is actually a number
+  const limit =
+    typeof queryKey[1] === "number" ? (queryKey[1] as number) : undefined;
 
   try {
     const baseQuery = db
       .select()
       .from(transactions)
       .orderBy(desc(transactions.name));
-    const queryWithLimit = limit ? baseQuery.limit(limit) : baseQuery;
+
+    const queryWithLimit =
+      typeof limit === "number" ? baseQuery.limit(limit) : baseQuery;
 
     const data = await queryWithLimit;
     return { data };

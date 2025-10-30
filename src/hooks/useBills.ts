@@ -1,5 +1,5 @@
 import { fetchBills, getTransactions } from "@/server/actions";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 interface UseBillsOptions {
   query?: string;
@@ -8,17 +8,16 @@ interface UseBillsOptions {
   pageSize?: number;
 }
 
-export default function useReccuringBills(options: UseBillsOptions) {
+export function useReccuringBills(options: UseBillsOptions) {
   return useQuery({
-    queryKey: ["bills", "reccuring", options],
+    queryKey: ["bills", options],
     queryFn: () => fetchBills(options),
-    placeholderData: keepPreviousData,
   });
 }
 
 export function useBills() {
   const { data } = useQuery({
-    queryKey: ["bills", "all"],
+    queryKey: ["bills", "home"],
     queryFn: getTransactions,
   });
 

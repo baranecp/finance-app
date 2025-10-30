@@ -1,6 +1,6 @@
 "use client";
 
-import useReccuringBills from "@/hooks/useBills";
+import { useReccuringBills } from "@/hooks/useBills";
 import RecurringBills from "@/components/RecurringBills";
 import Pagination from "@/components/Pagination";
 
