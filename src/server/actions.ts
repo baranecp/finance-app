@@ -236,6 +236,7 @@ export async function fetchBills({
 
   // Sort
   all.sort((a, b) => {
+    console.log("SortBy:", sortBy);
     switch (sortBy) {
       case "latest":
         return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -260,6 +261,16 @@ export async function fetchBills({
     }
   });
 
+  // Deduplicate by name (keep first occurrence, which is already sorted)
+  const uniqueMap = new Map<string, (typeof all)[0]>();
+  all.forEach((t) => {
+    if (!uniqueMap.has(t.name)) {
+      uniqueMap.set(t.name, t);
+    }
+  });
+  all = Array.from(uniqueMap.values());
+
+  // Pagination
   const totalPages = Math.ceil(all.length / pageSize);
   const start = (page - 1) * pageSize;
 
@@ -267,6 +278,9 @@ export async function fetchBills({
     id: t.id,
     name: t.name,
     avatar: t.avatar || "/default-avatar.png",
+    category: t.category,
+    type: t.type,
+    recurring: t.recurring,
     amount: t.amount,
     date: t.date,
   }));
