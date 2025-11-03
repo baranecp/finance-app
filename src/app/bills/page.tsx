@@ -42,7 +42,7 @@ export default async function BillsPage({ searchParams }: BillsPageProps) {
         <main
           className={`md:px-10 md:mt-10 mt-6 px-4 pb-14 flex-1 overflow-y-auto ${PublicSans.className}`}>
           <h1 className='heading-xl mb-8'>Recurring Bills</h1>
-          <div className='lg:grid grid-cols-2 gap-x-10'>
+          <div className='2xl:grid grid-cols-2 gap-x-10'>
             <SummaryBills />
             <section className='bg-white p-8 rounded-xl'>
               <div className='flex flex-wrap gap-4 mb-6 items-center justify-between'>
