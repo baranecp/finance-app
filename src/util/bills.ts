@@ -10,33 +10,28 @@ export interface Bill {
   daysLeft?: number;
 }
 
-export function categorizeBills(bills: Bill[], maxUpcoming = 15) {
+export function categorizeBills(bills: Bill[]) {
   const today = new Date();
   const todayDay = today.getDate();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
 
   const billsWithDaysLeft = bills.map((b) => {
-    const billDay = new Date(b.date).getDate();
-    let daysLeft = billDay - todayDay;
-
-    if (daysLeft < 0) {
-      const daysInMonth = new Date(
-        today.getFullYear(),
-        today.getMonth() + 1,
-        0
-      ).getDate();
-      daysLeft = daysInMonth - todayDay + billDay;
+    const billDay = new Date(b.date);
+    let daysLeft = billDay.getDate() - todayDay;
+    if (billDay.getMonth() === currentMonth && daysLeft < 0) {
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      daysLeft = daysInMonth - todayDay + billDay.getDate();
     }
 
     return { ...b, daysLeft };
   });
 
+  const paid = billsWithDaysLeft.filter((b) => b.daysLeft! < 0); // before today
   const due = billsWithDaysLeft.filter(
-    (b) => b.daysLeft! >= 0 && b.daysLeft! <= 5
-  );
-  const upcoming = billsWithDaysLeft.filter(
-    (b) => b.daysLeft! > 5 && b.daysLeft! <= maxUpcoming
-  );
-  const paid = billsWithDaysLeft.filter((b) => b.daysLeft! > maxUpcoming);
+    (b) => b.daysLeft! >= 0 && b.daysLeft! <= 1
+  ); // today or tomorrow
+  const upcoming = billsWithDaysLeft.filter((b) => b.daysLeft! > 1); // rest until month-end
 
   const totals = {
     dueTotal: due.reduce((acc, t) => acc + +t.amount, 0),

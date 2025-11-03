@@ -239,9 +239,9 @@ export async function fetchBills({
     console.log("SortBy:", sortBy);
     switch (sortBy) {
       case "latest":
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
+        return new Date(a.date).getDate() - new Date(b.date).getDate();
       case "oldest":
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
+        return new Date(b.date).getDate() - new Date(a.date).getDate();
       case "a-z":
         return a.name
           .trim()
