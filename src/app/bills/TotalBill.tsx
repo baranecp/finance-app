@@ -11,12 +11,12 @@ export default function TotalBill({
 }) {
   return (
     <div className='flex justify-between items-center'>
-      <p style={{ color: color }} className='text-grey-500 body-s'>
+      <p style={{ color: color }} className='text-grey-500 body-m'>
         {name}
       </p>
       <span
         style={{ color: color }}
-        className='text-grey-900 body-s-bold'>{`${totalBills} ($${total.toFixed(
+        className='text-grey-900 body-m-bold'>{`${totalBills} ($${total.toFixed(
         2
       )})`}</span>
     </div>

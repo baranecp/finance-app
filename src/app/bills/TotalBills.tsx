@@ -1,19 +1,20 @@
-import { Bill, categorizeBills } from "@/util/bills";
+import { categorizeBills } from "@/util/bills";
 import TotalBill from "./TotalBill";
-import { useBills } from "@/hooks/useBills";
+import { useReccuringBills } from "@/hooks/useBills";
 import { useMemo } from "react";
 
 export default function TotalBills() {
-  const { data } = useBills();
-  const bills = data?.data?.filter((t: Bill) => t.recurring);
+  const { data } = useReccuringBills({});
+
+  const recurringBills = useMemo(() => data?.data || [], [data]);
   const { paid, due, upcoming, totals } = useMemo(
-    () => categorizeBills(bills || []),
-    [bills]
+    () => categorizeBills(recurringBills),
+    [recurringBills]
   );
 
   return (
     <div className='p-5 bg-white rounded-[12px]'>
-      <h3 className='text-grey-900 heading-m mb-5'>Summary</h3>
+      <h3 className='text-grey-900 heading-l mb-5'>Summary</h3>
       <div className='flex flex-col gap-8'>
         <TotalBill
           name='Paid Bills'
@@ -21,7 +22,7 @@ export default function TotalBills() {
           total={totals.paidTotal}
         />
         <TotalBill
-          name='Totla Upcoming'
+          name='Total Upcoming'
           totalBills={upcoming.length}
           total={totals.upcomingTotal}
         />
