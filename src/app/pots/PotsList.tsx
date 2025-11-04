@@ -5,11 +5,10 @@ import { usePots } from "@/hooks/usePots";
 import { useModalStore } from "@/store/modalStore";
 
 export default function PotsList() {
-  const { pots, isLoading, error } = usePots();
+  const { pots, error } = usePots();
   const { open } = useModalStore();
 
   if (error) return <h2>{error.message}</h2>;
-  if (isLoading) return <h2>Fetching data...</h2>;
 
   return (
     <>

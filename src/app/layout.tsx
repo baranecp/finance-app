@@ -16,23 +16,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`flex min-h-screen ${PublicSans.className}`}>
+      <body className={`min-h-screen  ${PublicSans.className}`}>
         <NextTopLoader
           color='linear-gradient(to right, rgb(134, 239, 172), rgb(59, 130, 246), rgb(147, 51, 234))'
           showSpinner={false}
           crawlSpeed={300}
           height={5}
         />
-        <ClientWrapper>
-          <Navbar />
-          <main className='flex-1 overflow-y-auto transition-all duration-300'>
-            <div className='w-full' style={{ containerType: "inline-size" }}>
-              <Providers>
-                <PageTransition>{children}</PageTransition>
-              </Providers>
-            </div>
-          </main>
-        </ClientWrapper>
+        <div className='flex min-h-screen relative'>
+          <ClientWrapper>
+            <Navbar />
+            <main className='flex-1 overflow-y-auto transition-all duration-300'>
+              <div className='w-full' style={{ containerType: "inline-size" }}>
+                <Providers>{children}</Providers>
+              </div>
+            </main>
+          </ClientWrapper>
+          <PageTransition />
+        </div>
       </body>
     </html>
   );

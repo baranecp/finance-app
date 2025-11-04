@@ -8,7 +8,7 @@ export default function TransactionAllList({
   transactions: Transactions[];
 }) {
   return (
-    <div className='w-full'>
+    <div className='w-full h-screen'>
       {/* Header row */}
       <div className='hidden md:grid grid-cols-[1.5fr_1fr_1fr_1fr] items-center py-4 border-b border-grey-100 text-grey-500 body-s font-medium'>
         <span>Recipient / Sender</span>
