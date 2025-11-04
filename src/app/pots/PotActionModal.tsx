@@ -64,7 +64,7 @@ export default function PotActionModal() {
       {/* Info */}
       <div className='flex justify-between pt-4'>
         <p className={type === "add" ? "text-green-900" : "text-red-900"}>
-          {newTotal > 0 && newTotal <= 100
+          {newTotal > 0 && (newTotal / pot.target) * 100 <= 100
             ? ((newTotal / pot.target) * 100).toFixed(2)
             : 0}
           %
@@ -95,7 +95,7 @@ export default function PotActionModal() {
       <button
         onClick={handleConfirm}
         disabled={actionMutation.isPending || isDisabled}
-        className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900'>
+        className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900 cursor-pointer disabled:text-grey-300 disabled:cursor-default'>
         {actionMutation.isPending
           ? "Processing..."
           : `Confirm ${type === "add" ? "Addition" : "Withdrawal"}`}
