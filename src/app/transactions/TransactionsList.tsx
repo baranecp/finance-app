@@ -18,15 +18,13 @@ export default function TransactionsList({
   page,
   pageSize = 10,
 }: TransactionsListProps) {
-  const { data, isLoading } = useTransactions({
+  const { data } = useTransactions({
     query,
     sortBy,
     category,
     page,
     pageSize,
   });
-
-  if (isLoading) return <p>Loading...</p>;
 
   const transactionsWithFormattedDate =
     data?.data.map((t) => ({

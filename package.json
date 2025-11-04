@@ -18,6 +18,7 @@
     "drizzle-orm": "^0.44.5",
     "framer-motion": "^12.23.19",
     "next": "15.5.3",
+    "nextjs-toploader": "^3.9.17",
     "react": "19.1.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "19.1.0",
