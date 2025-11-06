@@ -32,13 +32,13 @@ export default function Pot({ pot, onAddMoney, onWithdraw }: PotProps) {
           <h2 className='text-grey-500 body-m'>Total Saved</h2>
           <h2 className='text-grey-900 heading-xl'>${total}</h2>
         </div>
-        <div className='w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700'>
+        <div className='w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 overflow-hidden'>
           <div
-            className='bg-[color:var(--theme)] h-2.5 rounded-full'
+            className='bg-[color:var(--theme)] h-2.5 rounded-full transition-all duration-500 ease-out'
             style={
               {
                 "--theme": theme,
-                width: percentage + "%",
+                width: `${percentage}%`,
               } as React.CSSProperties
             }
           />
