@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { isPot, useModalStore } from "@/store/modalStore";
 import { usePotModal } from "@/hooks/usePotModal";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import { FaDollarSign } from "react-icons/fa6";
-import ThemeSelect from "@/components/ThemeSelect";
+import ThemeSelect from "@/components/ui/ThemeSelect";
 import { usePots } from "@/hooks/usePots";
 
 export default function PotForm() {

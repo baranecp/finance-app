@@ -1,6 +1,6 @@
 "use client";
 
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import { useBudgetMutations } from "@/hooks/useBudgetMutation";
 import { isBudget, useModalStore } from "@/store/modalStore";
 

@@ -1,14 +1,12 @@
 "use client";
 import { getTransactions } from "@/server/actions";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { GoTriangleRight } from "react-icons/go";
 import { categorizeBills, Bill } from "@/util/bills";
 import { useMemo } from "react";
 import BillCard from "./BillCard";
+import ViewAllButton from "../ui/ViewAllButton";
 
 export default function Bills() {
-  const router = useRouter();
   const { data, isLoading, error } = useQuery({
     queryKey: ["bills", "home"],
     queryFn: getTransactions,
@@ -26,11 +24,7 @@ export default function Bills() {
       {/* Header */}
       <div className='flex justify-between'>
         <h2 className='heading-l'>Recurring Bills</h2>
-        <button
-          className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'
-          onClick={() => router.push("/bills")}>
-          See Details <GoTriangleRight />
-        </button>
+        <ViewAllButton href='/bills' label='See Details' />
       </div>
       <div className='flex flex-col gap-5 mt-5'>
         <BillCard

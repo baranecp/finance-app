@@ -4,8 +4,8 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { fetchBills, getTransactions } from "@/server/actions";
-import SearchInput from "@/components/SearchInput";
-import SortDropdown from "@/components/SortDropdown";
+import SearchInput from "@/components/ui/SearchInput";
+import SortDropdown from "@/components/ui/SortDropdown";
 import BillsList from "./BillsList";
 import SummaryBills from "./SummaryBills";
 import { Public_Sans } from "next/font/google";

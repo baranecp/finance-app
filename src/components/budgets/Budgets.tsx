@@ -1,15 +1,12 @@
 "use client";
-
-import { GoTriangleRight } from "react-icons/go";
-import { useRouter } from "next/navigation";
 import Budget from "./Budget";
-import DonutChart from "./DonutChart";
+import DonutChart from "../charts/DonutChart";
 import { useQuery } from "@tanstack/react-query";
 import { getBudgetsWithTransactions } from "@/server/actions";
 import { BudgetWithTransactions } from "@/types/finance";
+import ViewAllButton from "../ui/ViewAllButton";
 
 export default function Budgets() {
-  const router = useRouter();
   const {
     data: budgetsWithTx,
     isLoading,
@@ -32,11 +29,7 @@ export default function Budgets() {
       {/* Header */}
       <div className='flex justify-between mb-5'>
         <h2 className='heading-l'>Budgets</h2>
-        <button
-          className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'
-          onClick={() => router.push("/budgets")}>
-          See Details <GoTriangleRight />
-        </button>
+        <ViewAllButton href='/budgets' label='See Details' />
       </div>
 
       {/* Chart + Budgets container */}

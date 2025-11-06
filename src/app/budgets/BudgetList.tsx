@@ -3,15 +3,13 @@ import { getBudgetsWithTransactions } from "@/server/actions";
 import { BudgetWithTransactions } from "@/types/finance";
 import { useQuery } from "@tanstack/react-query";
 import BudgetDropdownButton from "./BudgetDropdownButton";
-import { GoTriangleRight } from "react-icons/go";
-import { useRouter } from "next/navigation";
-import Transaction from "@/components/Transaction";
-import ProgressBarBudget from "@/components/ProgressBarBudget";
+import Transaction from "@/components/transactions/Transaction";
+import ProgressBarBudget from "@/components/budgets/ProgressBarBudget";
 import { useBudgetData } from "@/hooks/useBudgetData";
 import ModalManager from "@/util/ModalManager";
+import ViewAllButton from "@/components/ui/ViewAllButton";
 
 export default function BudgetList() {
-  const router = useRouter();
   const {
     data: budgetsWithTx,
     isLoading,
@@ -87,13 +85,9 @@ export default function BudgetList() {
           <section className='flex flex-col gap-5 w-full bg-beige-100 mt-8 px-5 py-6 rounded-[12px]'>
             <div className='flex justify-between gap-1'>
               <h2 className='heading-l'>Latest Spendings</h2>
-              <button
-                className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'
-                onClick={() =>
-                  router.push(`/transactions?category=${budget.category}`)
-                }>
-                View All <GoTriangleRight />
-              </button>
+              <ViewAllButton
+                href={`/transactions?category=${budget.category}`}
+              />
             </div>
 
             {budget.transactions.map((t) => {

@@ -1,7 +1,7 @@
 import TransactionsList from "./TransactionsList";
-import SearchInput from "@/components/SearchInput";
-import FilterDropdown from "@/components/FilterDropdown";
-import SortDropdown from "@/components/SortDropdown";
+import SearchInput from "@/components/ui/SearchInput";
+import FilterDropdown from "@/components/ui/FilterDropdown";
+import SortDropdown from "@/components/ui/SortDropdown";
 import { fetchTransactions } from "@/server/actions";
 import {
   dehydrate,

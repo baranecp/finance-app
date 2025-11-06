@@ -1,8 +1,8 @@
 "use client";
 
 import { useReccuringBills } from "@/hooks/useBills";
-import RecurringBills from "@/components/RecurringBills";
-import Pagination from "@/components/Pagination";
+import RecurringBills from "@/components/bills/RecurringBills";
+import Pagination from "@/components/ui/Pagination";
 
 interface BillsListProps {
   query?: string;

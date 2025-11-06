@@ -2,9 +2,9 @@
 import { FaDollarSign } from "react-icons/fa6";
 import { useModalStore } from "@/store/modalStore";
 import { usePotModal } from "@/hooks/usePotModal";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import type { Pot } from "@/store/modalStore";
-import ProgressBar from "@/components/ProgressBar";
+import ProgressBar from "@/components/ui/ProgressBar";
 import usePotAction from "@/hooks/usePotAction";
 
 export default function PotActionModal() {

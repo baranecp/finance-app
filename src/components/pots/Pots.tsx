@@ -1,15 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { GoTriangleRight } from "react-icons/go";
-import PotsIcon from "../../public/pots.svg";
-import OverviewCard from "./OverviewCard";
+import PotsIcon from "../../../public/pots.svg";
+import OverviewCard from "../overview/OverviewCard";
 import Pot from "./Pot";
 import { getPots } from "@/server/actions";
+import ViewAllButton from "../ui/ViewAllButton";
 
 export default function Pots() {
-  const router = useRouter();
   const { data, isLoading, error } = useQuery({
     queryKey: ["pots", "home"],
     queryFn: getPots,
@@ -33,14 +31,8 @@ export default function Pots() {
       {/* Header */}
       <div className='flex justify-between'>
         <h2 className='heading-l'>Pots</h2>
-        <button
-          className='body-m text-grey-500 flex items-center gap-2 cursor-pointer'
-          onClick={() => router.push("/pots")}>
-          See Details <GoTriangleRight />
-        </button>
+        <ViewAllButton href='/pots' />
       </div>
-
-      {/* Responsive container for OverviewCard + Pots */}
       <div className='flex flex-wrap gap-5 mt-5 md:mt-0 items-center'>
         {/* OverviewCard */}
         <div className='flex-shrink-0 md:flex-1 min-w-[200px] max-w-[300px]'>
@@ -55,8 +47,6 @@ export default function Pots() {
             className='items-center w-full h-full'
           />
         </div>
-
-        {/* Pots grid */}
         <div className='flex flex-wrap gap-5'>
           {latestPots?.map((pot) => (
             <Pot

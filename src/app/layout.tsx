@@ -4,7 +4,7 @@ import "../styles/globals.css";
 import NextTopLoader from "nextjs-toploader";
 import { Public_Sans } from "next/font/google";
 import ClientWrapper from "./ClientWrapper";
-import PageTransition from "@/components/PageTransition";
+import PageTransition from "@/components/ui/PageTransition";
 const PublicSans = Public_Sans({
   weight: ["400", "700"],
 });

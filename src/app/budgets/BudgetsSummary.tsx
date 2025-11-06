@@ -1,4 +1,4 @@
-import DonutChart from "@/components/DonutChart";
+import DonutChart from "@/components/charts/DonutChart";
 import BudgetSpendings from "./BudgetsSpendings";
 
 export default function BudgetSummary() {

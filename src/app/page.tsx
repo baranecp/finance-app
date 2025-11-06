@@ -1,14 +1,14 @@
-import Overview from "@/components/Overview";
-import Pots from "@/components/Pots";
-import TransactionsOverview from "@/components/TransactionsOverview";
+import Overview from "@/components/overview/Overview";
+import Pots from "@/components/pots/Pots";
+import TransactionsOverview from "@/components/transactions/TransactionsOverview";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import Budgets from "@/components/Budgets";
+import Budgets from "@/components/budgets/Budgets";
 import { getBudgetsWithTransactions, getPots } from "@/server/actions";
-import Bills from "@/components/Bills";
+import Bills from "@/components/bills/Bills";
 
 export default async function Page() {
   const queryClient = new QueryClient();

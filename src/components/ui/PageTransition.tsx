@@ -7,7 +7,9 @@ export default function PageTransition() {
   const [showLogo, setShowLogo] = useState(true);
 
   useEffect(() => {
-    // Only show splash once per session
+    {
+      /*Only show splash once per session*/
+    }
     const hasSeen = sessionStorage.getItem("splashSeen");
     if (!hasSeen) {
       setShowLogo(true);

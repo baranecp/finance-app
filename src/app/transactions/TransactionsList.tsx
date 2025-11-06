@@ -1,7 +1,7 @@
 "use client";
 import useTransactions from "@/hooks/useTransactions";
-import TransactionAll from "@/components/TransactionAll";
-import Pagination from "@/components/Pagination";
+import TransactionAll from "@/components/transactions/TransactionAll";
+import Pagination from "@/components/ui/Pagination";
 
 interface TransactionsListProps {
   query?: string;

@@ -1,11 +1,11 @@
 "use client";
-import Modal from "@/components/Modal";
-import ThemeSelect from "@/components/ThemeSelect";
+import Modal from "@/components/ui/Modal";
+import ThemeSelect from "@/components/ui/ThemeSelect";
 import { useBudgetMutations } from "@/hooks/useBudgetMutation";
 import { useModalStore, isBudget } from "@/store/modalStore";
 import { useEffect, useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
-import CategorySelect from "@/components/CategorySelect";
+import CategorySelect from "@/components/ui/CategorySelect";
 import { useBudgetData } from "@/hooks/useBudgetData";
 
 export default function BudgetForm() {
@@ -54,6 +54,10 @@ export default function BudgetForm() {
   const usedBudgetThemes = budgetsWithTx?.map((b) => b.theme) ?? [];
 
   if (!isOpen || (!isCreating && !isEditing) || !isReady) return null;
+  const isFormInvalid =
+    !formData.category.trim() ||
+    formData.maximum <= 0 ||
+    !formData.theme.trim();
 
   return (
     <Modal
@@ -120,8 +124,16 @@ export default function BudgetForm() {
 
         <button
           type='submit'
-          disabled={createMutation.isPending || updateMutation.isPending}
-          className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900 cursor-pointer'>
+          disabled={
+            createMutation.isPending ||
+            updateMutation.isPending ||
+            isFormInvalid
+          }
+          className={`mt-4 w-full py-4 rounded-lg body-m-bold text-white ${
+            isFormInvalid
+              ? "bg-grey-500 cursor-not-allowed"
+              : "bg-grey-900 cursor-pointer"
+          }`}>
           {isEditing
             ? updateMutation.isPending
               ? "Editting..."

@@ -1,6 +1,6 @@
 "use client";
 
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import { isPot, useModalStore } from "@/store/modalStore";
 import { usePotModal } from "@/hooks/usePotModal";
 
