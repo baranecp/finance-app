@@ -45,11 +45,11 @@ export default async function BillsPage({ searchParams }: BillsPageProps) {
           <div className='2xl:grid grid-cols-2 gap-x-10'>
             <SummaryBills />
             <section className='bg-white p-8 rounded-xl'>
-              <div className='flex flex-wrap gap-4 mb-6 items-center justify-between'>
-                <div className='flex-1'>
+              <div className='flex flex-col sm:flex-row flex-wrap gap-4 mb-6 items-center justify-between'>
+                <div className='w-full md:w-auto'>
                   <SearchInput />
                 </div>
-                <div className='flex gap-4 items-center'>
+                <div className='w-full sm:w-auto flex items-center gap-4'>
                   <SortDropdown />
                 </div>
               </div>

@@ -9,6 +9,7 @@ export default function SummaryBills() {
   const { data } = useReccuringBills({});
   const bills = data?.data?.filter((t: Bill) => t.recurring);
   const { totals } = useMemo(() => categorizeBills(bills || []), [bills]);
+
   return (
     <div className='flex flex-col flex-wrap  gap-6'>
       <Summary total={totals.totalBills} />

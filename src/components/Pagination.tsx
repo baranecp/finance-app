@@ -24,20 +24,23 @@ export default function Pagination({
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className='flex gap-2 mt-4 justify-between pt-2.5'>
+    <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4 pt-2.5'>
+      {/* Prev Button */}
       <button
         onClick={() => changePage(currentPage - 1)}
         disabled={currentPage === 1}
-        className='px-3 py-1 text-grey-900 border border-beige-500 rounded-[8px] disabled:opacity-50 flex items-center gap-2 body-m cursor-pointer'>
-        <GoTriangleLeft size={20} className='text-beige-500' /> Prev
+        className='hidden px-2 py-1 sm:px-4 sm:py-2 text-grey-900 border border-beige-500 rounded-[8px] disabled:opacity-50 sm:flex items-center justify-center gap-1 sm:gap-2 body-m cursor-pointer text-sm sm:text-base'>
+        <GoTriangleLeft size={18} className='text-beige-500 shrink-0' />
+        <span>Prev</span>
       </button>
 
-      <div className='flex gap-2.5'>
+      {/* Page Buttons */}
+      <div className='flex gap-2 overflow-x-auto sm:overflow-visible no-scrollbar justify-center'>
         {pages.map((page) => (
           <button
             key={page}
             onClick={() => changePage(page)}
-            className={`px-[18px] py-2 border border-beige-500 rounded-[8px] cursor-pointer body-m ${
+            className={`px-[12px] sm:px-[18px] py-1.5 sm:py-2 border border-beige-500 rounded-[8px] cursor-pointer text-sm sm:text-base body-m whitespace-nowrap ${
               page === currentPage ? "bg-grey-900 text-white" : ""
             }`}>
             {page}
@@ -45,11 +48,13 @@ export default function Pagination({
         ))}
       </div>
 
+      {/* Next Button */}
       <button
         onClick={() => changePage(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className='px-4 py-2 text-grey-900  border border-beige-500 rounded-[8px] disabled:opacity-50 flex items-center gap-2 body-m cursor-pointer'>
-        Next <GoTriangleRight size={20} className='text-beige-500' />
+        className='hidden px-2 py-1 sm:px-4 sm:py-2 text-grey-900 border border-beige-500 rounded-[8px] disabled:opacity-50 sm:flex items-center justify-center gap-1 sm:gap-2 body-m cursor-pointer text-sm sm:text-base'>
+        <span className='hidden sm:inline'>Next</span>
+        <GoTriangleRight size={18} className='text-beige-500 shrink-0' />
       </button>
     </div>
   );

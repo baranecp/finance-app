@@ -53,9 +53,11 @@ export default async function TransactionsPage({
           className={`md:px-10 md:mt-10 mt-6 px-4 pb-14 flex-1 overflow-y-auto ${PublicSans.className}`}>
           <h1 className='heading-xl mb-8'>Transactions</h1>
           <section className='bg-white p-8 rounded-xl'>
-            <div className='flex flex-wrap gap-4 mb-6 items-center justify-between'>
-              <SearchInput />
-              <div className='flex gap-4 items-center'>
+            <div className='flex flex-col sm:flex-row flex-wrap gap-4 mb-6 items-center justify-between'>
+              <div className='w-full md:w-auto'>
+                <SearchInput />
+              </div>
+              <div className='flex flex-col sm:flex-row w-full md:w-auto gap-3 sm:gap-4 justify-between md:justify-end items-center'>
                 <FilterDropdown />
                 <SortDropdown />
               </div>
