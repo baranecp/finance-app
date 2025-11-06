@@ -2,6 +2,7 @@
 import React from "react";
 import { tv } from "tailwind-variants";
 import { Overview } from "@/types/finance";
+import { useAnimatedValue } from "@/hooks/useAnimatedValue";
 
 interface OverviewCardProps
   extends Omit<
@@ -68,6 +69,9 @@ export default function OverviewCard({
   sum,
   className,
 }: OverviewCardProps) {
+  const animatedValue = useAnimatedValue(sum, 700, {
+    isCurrency: true,
+  });
   const {
     wrapper,
     text: textCls,
@@ -87,7 +91,7 @@ export default function OverviewCard({
       {icon && React.createElement(icon, { className: iconCls() })}
       <div>
         <p className={textCls()}>{text}</p>
-        <p className={sumCls()}>{sum}</p>
+        <p className={sumCls()}>{animatedValue}</p>
       </div>
     </div>
   );
