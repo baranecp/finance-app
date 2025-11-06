@@ -18,7 +18,7 @@ export default function PotForm() {
   const [formData, setFormData] = useState({
     name: "",
     target: 0,
-    theme: "#000000",
+    theme: "",
   });
   const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +31,7 @@ export default function PotForm() {
         theme: pot.theme,
       });
     } else if (isCreating) {
-      setFormData({ name: "", target: 0, theme: "#000000" });
+      setFormData({ name: "", target: 0, theme: "" });
     }
   }, [isEditing, isCreating, pot]);
 
@@ -58,6 +58,8 @@ export default function PotForm() {
   const usedPotThemes = pots.map((pot) => pot.theme);
 
   if (!isOpen || (!isEditing && !isCreating)) return null;
+  const isFormInvalid =
+    !formData.name.trim() || formData.target <= 0 || !formData.theme;
 
   return (
     <Modal
@@ -128,9 +130,16 @@ export default function PotForm() {
         <button
           type='submit'
           disabled={
-            !!error || createMutation.isPending || updateMutation.isPending
+            !!error ||
+            createMutation.isPending ||
+            updateMutation.isPending ||
+            isFormInvalid
           }
-          className='mt-4 w-full py-4 rounded-lg body-m-bold text-white bg-grey-900 cursor-pointer disabled:text-grey-500 disabled:cursor-default'>
+          className={`mt-4 w-full py-4 rounded-lg body-m-bold text-white ${
+            isFormInvalid
+              ? "bg-grey-500 cursor-not-allowed"
+              : "bg-grey-900 cursor-pointer"
+          }`}>
           {isEditing
             ? updateMutation.isPending
               ? "Editing..."
