@@ -21,19 +21,27 @@ export default function PotForm() {
     theme: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
 
   // --- prefill when editing ---
   useEffect(() => {
+    if (!isOpen) {
+      setIsReady(false);
+      return;
+    }
+
     if (isEditing && isPot(pot)) {
       setFormData({
         name: pot.name,
         target: pot.target,
         theme: pot.theme,
       });
+      setIsReady(true);
     } else if (isCreating) {
       setFormData({ name: "", target: 0, theme: "" });
+      setIsReady(true);
     }
-  }, [isEditing, isCreating, pot]);
+  }, [isEditing, isCreating, pot, isOpen]);
 
   // --- validate target against current total ---
   useEffect(() => {
@@ -57,7 +65,7 @@ export default function PotForm() {
   };
   const usedPotThemes = pots.map((pot) => pot.theme);
 
-  if (!isOpen || (!isEditing && !isCreating)) return null;
+  if (!isOpen || (!isEditing && !isCreating) || !isReady) return null;
   const isFormInvalid =
     !formData.name.trim() || formData.target <= 0 || !formData.theme;
 
