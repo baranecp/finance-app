@@ -2,18 +2,25 @@
 import { getTransactions } from "@/server/actions";
 import { useQuery } from "@tanstack/react-query";
 import { categorizeBills, Bill } from "@/util/bills";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import BillCard from "./BillCard";
 import ViewAllButton from "../ui/ViewAllButton";
 
 export default function Bills() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, isFetched } = useQuery({
     queryKey: ["bills", "home"],
     queryFn: getTransactions,
   });
 
   const bills = data?.data?.filter((t: Bill) => t.recurring);
   const { totals } = useMemo(() => categorizeBills(bills || []), [bills]);
+
+  useEffect(() => {
+    if (isFetched) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).finishLoading?.();
+    }
+  }, [isFetched]);
 
   if (isLoading) return <p>Loading recurring bills.</p>;
   if (error) return <p>Something went wrong.</p>;

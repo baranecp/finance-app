@@ -5,17 +5,25 @@ import { useQuery } from "@tanstack/react-query";
 import { getBudgetsWithTransactions } from "@/server/actions";
 import { BudgetWithTransactions } from "@/types/finance";
 import ViewAllButton from "../ui/ViewAllButton";
+import { useEffect } from "react";
 
 export default function Budgets() {
   const {
     data: budgetsWithTx,
     isLoading,
     error,
+    isFetched,
   } = useQuery<BudgetWithTransactions[]>({
     queryKey: ["budgetsWithTransactions", "home"],
     queryFn: async () => getBudgetsWithTransactions(),
   });
 
+  useEffect(() => {
+    if (isFetched) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).finishLoading?.();
+    }
+  }, [isFetched]);
   if (isLoading) return <p>Loading pots.</p>;
   if (error) return <p>Something went wrong.</p>;
   if (!budgetsWithTx) return <p>No transactions found.</p>;

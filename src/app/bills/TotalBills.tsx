@@ -1,3 +1,4 @@
+"use client";
 import { categorizeBills } from "@/util/bills";
 import TotalBill from "./TotalBill";
 import { useReccuringBills } from "@/hooks/useBills";

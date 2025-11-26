@@ -9,25 +9,17 @@ export default function PageTransition() {
   useEffect(() => {
     const hasSeen = sessionStorage.getItem("splashSeen");
 
-    if (hasSeen) {
-      setShowLogo(false);
-      return;
-    }
-
-    // Wait for full page load (images, Next.js hydration, fonts, etc.)
-    const handleLoad = () => {
-      setShowLogo(false);
+    // global function so any page can finish loading
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).finishLoading = () => {
       sessionStorage.setItem("splashSeen", "true");
+      setShowLogo(false);
     };
 
-    // If page is already loaded (soft navigation)
-    if (document.readyState === "complete") {
-      handleLoad();
-    } else {
-      window.addEventListener("load", handleLoad);
+    // If user already saw splash this session → skip
+    if (hasSeen) {
+      setShowLogo(false);
     }
-
-    return () => window.removeEventListener("load", handleLoad);
   }, []);
 
   return (
@@ -37,9 +29,8 @@ export default function PageTransition() {
           key='splash'
           className='fixed inset-0 z-[9999] flex items-center justify-center bg-[#0b0b0b]'
           initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 4, ease: "easeInOut" }}>
+          transition={{ duration: 1, ease: "easeInOut" }}>
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{
@@ -52,7 +43,7 @@ export default function PageTransition() {
               ],
             }}
             transition={{
-              duration: 4,
+              duration: 2,
               ease: "easeInOut",
               repeat: Infinity,
             }}>
