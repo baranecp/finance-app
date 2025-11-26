@@ -39,7 +39,7 @@ export default function PageTransition() {
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 2, ease: "easeInOut" }}>
+          transition={{ duration: 4, ease: "easeInOut" }}>
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{
@@ -52,7 +52,7 @@ export default function PageTransition() {
               ],
             }}
             transition={{
-              duration: 2,
+              duration: 4,
               ease: "easeInOut",
               repeat: Infinity,
             }}>
