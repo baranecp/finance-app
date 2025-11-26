@@ -32,7 +32,7 @@ export default function PageTransition() {
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}>
+          transition={{ duration: 1, ease: "easeInOut" }}>
           {/* Glowing logo */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -46,7 +46,7 @@ export default function PageTransition() {
               ],
             }}
             transition={{
-              duration: 1.5,
+              duration: 2,
               ease: "easeInOut",
               repeat: Infinity,
             }}>
