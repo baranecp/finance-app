@@ -7,20 +7,27 @@ export default function PageTransition() {
   const [showLogo, setShowLogo] = useState(true);
 
   useEffect(() => {
-    {
-      /*Only show splash once per session*/
-    }
     const hasSeen = sessionStorage.getItem("splashSeen");
-    if (!hasSeen) {
-      setShowLogo(true);
-      const timer = setTimeout(() => {
-        setShowLogo(false);
-        sessionStorage.setItem("splashSeen", "true");
-      }, 1800);
-      return () => clearTimeout(timer);
-    } else {
+
+    if (hasSeen) {
       setShowLogo(false);
+      return;
     }
+
+    // Wait for full page load (images, Next.js hydration, fonts, etc.)
+    const handleLoad = () => {
+      setShowLogo(false);
+      sessionStorage.setItem("splashSeen", "true");
+    };
+
+    // If page is already loaded (soft navigation)
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+    }
+
+    return () => window.removeEventListener("load", handleLoad);
   }, []);
 
   return (
@@ -33,7 +40,6 @@ export default function PageTransition() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1, ease: "easeInOut" }}>
-          {/* Glowing logo */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{
