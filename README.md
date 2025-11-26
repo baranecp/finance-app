@@ -1,6 +1,6 @@
 # Finance App
 
-![finance-app](./public/images/preview.svg)
+![finance-app](./public/preview.svg)
 A personal finance web app built with Next.js (TypeScript) for tracking income, expenses, budgets and visualizing transaction data.
 This repository is a Next.js app (TypeScript-first) that uses Drizzle ORM and Neon for a serverless Postgres backend, Chart.js for charts, Tailwind for styling, and React 19.
 
