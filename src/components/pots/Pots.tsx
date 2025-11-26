@@ -6,8 +6,6 @@ import OverviewCard from "../overview/OverviewCard";
 import Pot from "./Pot";
 import { getPots } from "@/server/actions";
 import ViewAllButton from "../ui/ViewAllButton";
-import { useSplashStore } from "@/store/useSplashStore";
-import { useEffect } from "react";
 
 export default function Pots() {
   const { data, isLoading, error } = useQuery({
@@ -23,13 +21,6 @@ export default function Pots() {
   const latestPots = data?.data
     ?.sort((a, b) => a.name.localeCompare(b.name))
     .slice(0, 4);
-
-  const { increment, decrement } = useSplashStore();
-
-  useEffect(() => {
-    increment();
-    return () => decrement();
-  }, [increment, decrement]);
 
   if (isLoading) return <p>Loading pots.</p>;
   if (error) return <p>Something went wrong.</p>;

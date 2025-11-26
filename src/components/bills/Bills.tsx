@@ -2,10 +2,9 @@
 import { getTransactions } from "@/server/actions";
 import { useQuery } from "@tanstack/react-query";
 import { categorizeBills, Bill } from "@/util/bills";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import BillCard from "./BillCard";
 import ViewAllButton from "../ui/ViewAllButton";
-import { useSplashStore } from "@/store/useSplashStore";
 
 export default function Bills() {
   const { data, isLoading, error } = useQuery({
@@ -15,12 +14,6 @@ export default function Bills() {
 
   const bills = data?.data?.filter((t: Bill) => t.recurring);
   const { totals } = useMemo(() => categorizeBills(bills || []), [bills]);
-
-  const { increment, decrement } = useSplashStore();
-  useEffect(() => {
-    increment();
-    return () => decrement();
-  }, [increment, decrement]);
 
   if (isLoading) return <p>Loading recurring bills.</p>;
   if (error) return <p>Something went wrong.</p>;
