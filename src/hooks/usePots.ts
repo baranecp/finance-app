@@ -9,6 +9,7 @@ export function usePots() {
   });
 
   const pots =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?.data?.map((pot: any) => ({
       ...pot,
       total: Number(pot.total),
