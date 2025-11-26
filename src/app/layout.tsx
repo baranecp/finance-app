@@ -5,6 +5,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Public_Sans } from "next/font/google";
 import ClientWrapper from "./ClientWrapper";
 import PageTransition from "@/components/ui/PageTransition";
+
 const PublicSans = Public_Sans({
   weight: ["400", "700"],
 });
@@ -25,14 +26,17 @@ export default function RootLayout({
         />
         <div className='flex min-h-screen relative'>
           <ClientWrapper>
-            <Navbar />
-            <main className='flex-1 overflow-y-auto transition-all duration-300'>
-              <div className='w-full' style={{ containerType: "inline-size" }}>
-                <Providers>{children}</Providers>
-              </div>
-            </main>
+            <PageTransition>
+              <Navbar />
+              <main className='flex-1 overflow-y-auto transition-all duration-300'>
+                <div
+                  className='w-full'
+                  style={{ containerType: "inline-size" }}>
+                  <Providers>{children}</Providers>
+                </div>
+              </main>
+            </PageTransition>
           </ClientWrapper>
-          <PageTransition />
         </div>
       </body>
     </html>

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getBudgetsWithTransactions } from "@/server/actions";
 import { BudgetWithTransactions } from "@/types/finance";
 import ViewAllButton from "../ui/ViewAllButton";
+import { useSplashStore } from "@/store/useSplashStore";
 import { useEffect } from "react";
 
 export default function Budgets() {
@@ -12,18 +13,17 @@ export default function Budgets() {
     data: budgetsWithTx,
     isLoading,
     error,
-    isFetched,
   } = useQuery<BudgetWithTransactions[]>({
     queryKey: ["budgetsWithTransactions", "home"],
     queryFn: async () => getBudgetsWithTransactions(),
   });
 
+  const { increment, decrement } = useSplashStore();
   useEffect(() => {
-    if (isFetched) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).finishLoading?.();
-    }
-  }, [isFetched]);
+    increment();
+    return () => decrement();
+  }, [increment, decrement]);
+
   if (isLoading) return <p>Loading pots.</p>;
   if (error) return <p>Something went wrong.</p>;
   if (!budgetsWithTx) return <p>No transactions found.</p>;

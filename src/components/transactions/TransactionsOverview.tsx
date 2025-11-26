@@ -6,20 +6,19 @@ import Transaction from "./Transaction";
 import { fetchLatestTransactions } from "@/server/actions";
 import ViewAllButton from "../ui/ViewAllButton";
 import { useEffect } from "react";
+import { useSplashStore } from "@/store/useSplashStore";
 
 export default function TransactionsOverview() {
-  const { data, isLoading, error, isFetched } = useQuery<Transactions[]>({
+  const { data, isLoading, error } = useQuery<Transactions[]>({
     queryKey: ["latest-transactions"],
     queryFn: fetchLatestTransactions,
   });
 
+  const { increment, decrement } = useSplashStore();
   useEffect(() => {
-    if (isFetched) {
-      // If finishLoading exists (only before splash is removed)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).finishLoading?.();
-    }
-  }, [isFetched]);
+    increment();
+    return () => decrement();
+  }, [increment, decrement]);
 
   if (isLoading) return <p>Loading transactions...</p>;
   if (error) return <p>Something went wrong.</p>;
