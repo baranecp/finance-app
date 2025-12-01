@@ -50,7 +50,7 @@ export default async function TransactionsPage({
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className='flex h-screen bg-beige-100'>
         <main
-          className={`md:px-10 md:mt-10 mt-6 px-4 pb-14 flex-1 overflow-y-auto ${PublicSans.className}`}>
+          className={`md:px-10 md:pt-10 pt-6 px-4 pb-14 flex-1 overflow-y-auto ${PublicSans.className}`}>
           <h1 className='heading-xl mb-8'>Transactions</h1>
           <section className='bg-white p-8 rounded-xl'>
             <div className='flex flex-col sm:flex-row flex-wrap gap-4 mb-6 items-center justify-between'>
