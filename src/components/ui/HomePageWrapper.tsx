@@ -26,7 +26,7 @@ export default function HomePageWrapper({ children }: Props) {
   useEffect(() => setHydrated(true), []);
 
   // Block rendering until hydrated AND all queries done
-  if (!hydrated || isFetching > 0) return null;
+  if (!hydrated) return null;
 
   return <>{children}</>;
 }
