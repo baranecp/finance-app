@@ -7,6 +7,9 @@ This repository is a Next.js app (TypeScript-first) that uses Drizzle ORM and Ne
 ## Quick demo
 Run the app locally (see instructions below) and open http://localhost:3000. The UI demonstrates transaction lists, category filtering, charts and simple budgeting views.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Finance%20App-blue)](https://finance-app-beta-henna.vercel.app)
+
+
 ## Tech stack
 - Framework: Next.js (15.5.3) with TypeScript
 - UI: React 19.1.0, Tailwind CSS
@@ -18,16 +21,3 @@ Run the app locally (see instructions below) and open http://localhost:3000. The
 
 Dependencies are listed in package.json — this README references the current versions used in the repo.
 
-## Getting started
-
-### Clone & install
-```bash
-git clone https://github.com/baranecp/finance-app.git
-cd finance-app
-npm install
-# or
-# yarn
-# pnpm install
-```
-
-Turbopack is enabled in the dev script; if you encounter issues, try removing `--turbopack` temporarily (edit package.json script).
