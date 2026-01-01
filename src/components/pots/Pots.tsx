@@ -9,8 +9,9 @@ import ViewAllButton from "../ui/ViewAllButton";
 
 export default function Pots() {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["pots", "home"],
+    queryKey: ["pots"],
     queryFn: getPots,
+    refetchOnMount: "always",
   });
 
   const totalSaved = data?.data?.reduce(

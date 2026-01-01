@@ -12,16 +12,17 @@ export default function Budgets() {
     isLoading,
     error,
   } = useQuery<BudgetWithTransactions[]>({
-    queryKey: ["budgetsWithTransactions", "home"],
+    queryKey: ["budgetsWithTransactions"],
     queryFn: async () => getBudgetsWithTransactions(),
+    refetchOnMount: "always",
   });
 
   if (isLoading) return <p>Loading pots.</p>;
   if (error) return <p>Something went wrong.</p>;
   if (!budgetsWithTx) return <p>No transactions found.</p>;
 
-  const latestBudgets = budgetsWithTx
-    ?.sort((a, b) => a.category.localeCompare(b.category))
+  const latestBudgets = [...budgetsWithTx]
+    .sort((a, b) => a.category.localeCompare(b.category))
     .slice(0, 4);
 
   return (
