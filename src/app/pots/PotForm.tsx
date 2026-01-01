@@ -22,6 +22,7 @@ export default function PotForm() {
   });
   const [error, setError] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const MAX_TARGET = 3_835;
 
   // --- prefill when editing ---
   useEffect(() => {
@@ -45,7 +46,11 @@ export default function PotForm() {
 
   // --- validate target against current total ---
   useEffect(() => {
-    if (isEditing && isPot(pot) && formData.target < pot.total) {
+    if (formData.target > MAX_TARGET) {
+      setError(
+        `Target cannot exceed current balance $${MAX_TARGET.toLocaleString()}`
+      );
+    } else if (isEditing && isPot(pot) && formData.target < pot.total) {
       setError(
         `Target cannot be lower than current total ($${pot.total.toFixed(2)})`
       );
